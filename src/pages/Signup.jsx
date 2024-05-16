@@ -3,8 +3,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setAuthLoading, setUser } from '../slice/auth';
+import { setAuthLoading, setSignupData, setUser } from '../slice/auth';
 import toast from 'react-hot-toast';
+import { getOtp } from '../service/operation/auth';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -19,9 +20,12 @@ const Signup = () => {
 
     const handleSignup = async(data) => {
         console.log(data)
-        dispatch(setUser(data))
-        dispatch(setAuthLoading(true))
-        toast.loading("loading..")
+      if(data.password === data.confirmPassword){
+        dispatch(setSignupData(data))
+        await getOtp(data.email,navigate,dispatch);
+      }else{
+        toast.error("Password not matched")
+      }
      }
 
     if(authLoading){
@@ -66,7 +70,7 @@ const Signup = () => {
           </div>
           
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" >Email</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="email"
@@ -79,10 +83,9 @@ const Signup = () => {
             }
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" >Password</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
               type="password"
               placeholder="Enter your password"
               {...register("password",{required:true})}
@@ -93,10 +96,9 @@ const Signup = () => {
             }
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirm-password">Confirm Password</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" >Confirm Password</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
-              id="confirm-password"
               type="password"
               placeholder="Confirm your password"
               {...register("confirmPassword",{required:true})}

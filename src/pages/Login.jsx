@@ -2,14 +2,15 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../service/operation/auth';
 
 const Login = () => {
     const navigate = useNavigate();
-    const {user} = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const {authLoading} = useSelector((state) => state.auth);
 
-  console.log(user,"user..")
 
     const {
         register,
@@ -18,9 +19,15 @@ const Login = () => {
     } = useForm();
 
     const handleLogin = async(data) => {
-       console.log(data)
-       toast.success("heeloo")
+       const result = await login(data,navigate,dispatch)
+
     }
+
+    if(authLoading){
+      return <div className='h-screen w-screen flex items-center text-black justify-center'>
+       <div className='custom-loader'></div>
+      </div>
+    }  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
