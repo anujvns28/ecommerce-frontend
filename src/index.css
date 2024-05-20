@@ -31,3 +31,19 @@ code {
 .nav-shadow{
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+
+.subCategories {
+ 
+  width: 80%;
+ 
+  display: none;
+  top: 20%;
+  left: 100%;
+ }
+ 
+ 
+ 
+ .anuj:hover > .subCategories{
+ display: block;
+ }

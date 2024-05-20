@@ -7,3 +7,12 @@ export const authEndPoints = {
     FORGOTPASSWORDTOKEN_API : BASE_URL + "/auth/forgotPasswordToken",
     FORGOTPASSWORD_API : BASE_URL + "/auth/forgotPassword"
 }
+
+export const categoryEndPoints = {
+    GET_ALL_CATEGORY_API : BASE_URL + "/category/fetchallCategory",
+}
+
+export const subCtegoryEndPoints = {
+    GET_CATEGORY_SUBCATEGORY : BASE_URL + "/subCategory/fetchallSubCategory",
+}
+

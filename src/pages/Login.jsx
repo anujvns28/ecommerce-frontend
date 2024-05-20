@@ -30,8 +30,8 @@ const Login = () => {
     }  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+    <div className="sm:min-h-screen h-[75vh] overflow-y-hidden flex items-center justify-center bg-gray-100">
+      <div className="sm:w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">Login to Your Account</h2>
         <form onSubmit={handleSubmit(handleLogin)}>
           <div className="mb-4">

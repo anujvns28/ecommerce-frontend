@@ -5,10 +5,11 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import VeryfyEmail from './pages/VeryfyEmail';
 import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
 
 function App() {
   return (
-    <div className='text-blacks'>
+    <div className='h-full w-full'>
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -16,6 +17,8 @@ function App() {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/verify-email' element={<VeryfyEmail/>}/>
       </Routes>
+
+      <Footer/>
     </div>
   );
 }
