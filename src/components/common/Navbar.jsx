@@ -19,7 +19,8 @@ const Navbar = () => {
   const fetchAllCategory = async () => {
     const result = await getAllCategories();
     if (result) {
-      const category = result.data.filter((item)=>item.subCategories.length>0);
+      console.log()
+      const category = result.categoies.filter((item)=>item.subCategorys.length>0);
       setCategories(category)
     }
   }
@@ -64,7 +65,8 @@ const Navbar = () => {
                           </div>
                           <div className='absolute p-4 rounded-md bg-slate-300 subCategories'>
                             {
-                              category.subCategories.map((subCategory) => {
+                              category.subCategorys
+                              .map((subCategory) => {
                                 return <div className='hover:bg-slate-400  py-4 px-4 rounded-md relative'>
                                   {subCategory.name}
                                 </div>
@@ -141,7 +143,8 @@ const Navbar = () => {
               categories.map((category) => {
                 return <SubMenu label={category.categoryName}>
                        {
-                        category.subCategories.map((subCategory) => {
+                        category.subCategorys
+                        .map((subCategory) => {
                          return <MenuItem > {subCategory.name}</MenuItem>
                         })
                        }
