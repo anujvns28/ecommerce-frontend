@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import VeryfyEmail from './pages/VeryfyEmail';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import SubCategories from './pages/SubCategories';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/verify-email' element={<VeryfyEmail/>}/>
+        <Route path='/products/:categoryId/:subCategoryId' element={<SubCategories/>} />
       </Routes>
 
       <Footer/>

@@ -47,3 +47,20 @@ code {
  .anuj:hover > .subCategories{
  display: block;
  }
+ 
+
+ /* customStyles.css */
+.transition-div {
+  width: 100%;
+  overflow:hidden;
+  transition: max-height 1000ms ease-in-out;
+  max-height: 0;
+}
+
+.transition-div.open {
+  max-height: 100%; 
+}
+
+.transition-div.closed {
+  max-height: 0;
+}

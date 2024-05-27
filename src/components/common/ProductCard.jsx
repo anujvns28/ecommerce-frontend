@@ -1,17 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const SubCategoryCard = ({item,categoryId}) => {
+const ProductCard = ({product}) => {
   return (
-    <Link to={`/products/${categoryId}/${item._id}`}>
+    <Link>
     <div className='drop-shadow-lg p-3 mb-4 rounded-xl bg-white    group transition-all duration-800 '>
       
     <div className=' flex justify-center w-full items-center bg-slate-100 border-b rounded-lg '>  
-    <img className=' object-cover rounded-t-md h-[250px] w-[250px] lg:h-[350px] lg:w-[400px] border' 
-    src={item.image} />
+    <img className=' object-cover rounded-t-md h-[100px] w-[100px] lg:h-[350px] lg:w-[400px] border' 
+    src={product.
+        mainImage} />
     </div>
     <div className="flex flex-col gap-2 px-1 py-3  mt-1 items-center rounded-md ">
-          <p className="text-xl font-semibold text-richblack-5 italic">{item.name}</p>
+          <p className="lg:text-xl text-sm font-semibold text-richblack-5 italic">{product.productName}</p>
     </div>
      
     </div>
@@ -19,4 +20,4 @@ const SubCategoryCard = ({item,categoryId}) => {
   )
 }
 
-export default SubCategoryCard
+export default ProductCard

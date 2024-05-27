@@ -9,10 +9,12 @@ export const authEndPoints = {
 }
 
 export const categoryEndPoints = {
-    GET_ALL_CATEGORY_API : BASE_URL + "/product/fetchallCategory",
+    GET_ALL_CATEGORY_API : BASE_URL + "/category/fetchallCategory",
+    FETCH_CATEGORY_INFO_API : BASE_URL + "/category/categoryInfo"
 }
 
 export const subCtegoryEndPoints = {
     GET_CATEGORY_SUBCATEGORY : BASE_URL + "/subCategory/fetchallSubCategory",
+    FETCH_SUBCATEGORY_WISE_PRODUCT_API: BASE_URL + "/subCategory/subCategoryProduct"
 }
 

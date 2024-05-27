@@ -29,7 +29,7 @@ const Home = () => {
   const fetchAllCategory = async () => {
     const result = await getAllCategories();
     if (result) {
-      const categorys = result.categoies.filter((item) => item.subCategorys
+      const categorys = result.data.filter((item) => item.subCategories
       .length > 0);
       setCategories(categorys);
     }
@@ -64,11 +64,11 @@ const Home = () => {
                   slidesPerView={ viewport < 500 ? 1.2 : 4}
                 >
                   {
-                    category.subCategorys
+                    category.subCategories
                     .map((item) => (
                       <div>
                         <SwiperSlide>
-                          <SubCategoryCard item={item}/>
+                          <SubCategoryCard item={item} categoryId={category._id} />
                         </SwiperSlide>
                       </div>
                     ))
