@@ -13,7 +13,6 @@ const SubCategories = () => {
     const [category,setCategory] = useState();
     const {subCategory,filteredProduct} = useSelector((state) =>state.product)
 
-  
 
     const fetchCategoryInfo = async() => {
       const result = await CategoryInfo(categoryId);
@@ -34,9 +33,8 @@ const SubCategories = () => {
       </div>
     }
 
-    console.log(subCategory,"htisi is ")
   return (
-    <div className='flex flex-col my-5'>
+    <div className='flex flex-col my-5 '>
       <div className='w-full flex items-center justify-between  text-black py-2 sticky top-0 z-40  px-5 mb-5  mt-5 bg-white'>
        <div className='flex flex-col'>
         <p className='text-xs'>{ category.categoryName }/ {subCategory && subCategory.name}</p> 
@@ -63,19 +61,21 @@ const SubCategories = () => {
        </div>
       </div>
 
-     <div className='flex items-center justify-between w-full min-h-[500px]'>
-     <div className=''>
+     <div className='flex  w-full min-h-[500px] '>
+     <div className=' lg:w-[22%]'>
       <FilterSidebar toggled={toggled} setToggled={setToggled}/>
       </div>
 
       {/* product div */}
-      <div className='w-full h-full flex items-center justify-center '>
+      <div className='w-full h-full p-2 bg-slate-100 rounded-md flex items-center justify-center border'>
       {
         !filteredProduct ?  <div className='custom-loader'></div>
-        : <div className='flex flex-row flex-wrap'>
+        : <div className='flex flex-row flex-wrap w-full lg:gap-5 gap-2 p-1'>
           {
             filteredProduct.map((product) => {
-              return <ProductCard product={product}/>
+              return <div key={product._id} className='lg:w-[32%] lg:min-w-[250px]   w-[160px]'>
+                <ProductCard product={product}/>
+              </div>
             })
           }
         </div> 
