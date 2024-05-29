@@ -7,6 +7,7 @@ import VeryfyEmail from './pages/VeryfyEmail';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import SubCategories from './pages/SubCategories';
+import SingleProduct from './pages/SingleProduct';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/verify-email' element={<VeryfyEmail/>}/>
         <Route path='/products/:categoryId/:subCategoryId' element={<SubCategories/>} />
+        <Route path='/shouse/:productId' element={<SingleProduct/>} />
       </Routes>
 
       <Footer/>

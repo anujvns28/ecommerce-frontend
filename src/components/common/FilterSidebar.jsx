@@ -3,20 +3,24 @@ import { gender, ProColor, ProPrice, proRating } from '../../data/filterData'
 import { AiOutlineCheck } from "react-icons/ai"
 import { RxCross2 } from "react-icons/rx";
 import { getAllSubCategoriesProduct } from '../../service/operation/subCategory';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product';
+import { productLoading, setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product';
 
 
-const FilterSidebar = ({ toggled, setToggled }) => {
+const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
     const { categoryId, subCategoryId } = useParams();
     const [genderFilter, setGenderFilter] = useState([]);
     const [priceFilter, setPriceFilter] = useState([]);
     const [colorFilter, setColorFilter] = useState([]);
-    const {allProduct,filteredProduct} = useSelector((state) => state.product)
-    const [productFilter,setProductFilter] = useState();
+    const [allShouse,setAllShouse] = useState();
+    const { allProduct,filteredProduct } = useSelector((state) => state.product)
+    const [productFilter, setProductFilter] = useState();
+    const [serarchParams,setSearchParams] = useSearchParams();
 
     const dispatch = useDispatch();
+    const location = useLocation();
+
 
     const fetchProducts = async () => {
         const result = await getAllSubCategoriesProduct(subCategoryId);
@@ -24,6 +28,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
             dispatch(setSubCategory(result.data));
             dispatch(setFilteredProduct(result.data.product))
             dispatch(setTotalProduct(result.data.product))
+            setAllShouse(result.data)
         }
     }
 
@@ -36,6 +41,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
             genders.push(gender);
         }
         setGenderFilter(genders)
+        setSearchParams({"gender":genders.join(',')})
     }
 
     const handlePriceFilter = (price) => {
@@ -60,13 +66,16 @@ const FilterSidebar = ({ toggled, setToggled }) => {
         setColorFilter(colors)
     }
 
+    
 
-    useEffect(() => {
-        console.log("running...")
+    // filter function
+    const filter = () => {
+        console.log("calling.. filter")
+        let filteredShouse
         dispatch(setFilteredProduct(allProduct))
-       
-
-        if(priceFilter.length > 0){
+      
+        // price base filter
+        if (priceFilter.length > 0) {
             console.log("price...")
             let products = [];
             priceFilter.map((item) => {
@@ -74,36 +83,66 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                 const min_amt = amounts[0] == "Under" ? 0 : Number(amounts[0]);
                 const max_amt = amounts[1] == "Over" ? 1000000 : Number(amounts[1]);
                 allProduct.map((product) => {
-                    if(product.price >= min_amt && product.price <= max_amt){
+                    if (product.price >= min_amt && product.price <= max_amt) {
                         products.push(product);
                     }
                 })
             })
             dispatch(setFilteredProduct(products))
-            setProductFilter(products);
+            filteredShouse = [...products];
         }
 
-        console.log(productFilter,"this is filterd product")
-
-        if(genderFilter.length>0){
+        // gender base filter
+        if (genderFilter.length > 0) {
             let products = [];
-            const filtering = productFilter ? productFilter : allProduct
+            const shouse = filteredShouse ? filteredShouse : allShouse;
             genderFilter.map((gender) => {
-                filtering.map((item) => {
-                    if(item.forWhom == gender){
+                shouse.map((item) => {
+                    if (item.forWhom == gender) {
                         products.push(item);
                     }
                 });
-            }) 
-            dispatch(setFilteredProduct(products))  
+            })
+            dispatch(setFilteredProduct(products))
+            filteredShouse = [...products];
         }
 
+        //color base filter
+        if (colorFilter.length > 0) {
+            let products = [];
+            const shouse = filteredShouse ? filteredShouse : allProduct
+            colorFilter.map((color) => {
+                shouse.map((item) => {
+                    if (item.color == color) {
+                        products.push(item);
+                    }
+                });
+            })
+            dispatch(setFilteredProduct(products))
+            filteredShouse = [...products];
+        }
 
+        loadingFunction();
+    }
+
+    const checkFilters = () => {
+        const genders = serarchParams.get("gender")
+        if(genders){
+           setGenderFilter(genders.split(","));
+        }
+    }
+
+    useEffect(() => {
+       if(allShouse){
+        filter()
+       }
     }, [genderFilter, colorFilter, priceFilter])
 
     useEffect(() => {
         fetchProducts()
+        checkFilters()
     }, [])
+
 
     return (
         <div className='w-full h-full  '>
@@ -119,6 +158,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                                         className='outline-none border border-black w-5 h-5'
                                         type='checkbox'
                                         onChange={() => handleGenderFilter(item.gender)}
+                                        checked={genderFilter.includes(item.gender) ? true : false}
                                     />
                                     <p>{item.gender}</p>
                                 </label>
@@ -194,9 +234,21 @@ const FilterSidebar = ({ toggled, setToggled }) => {
 
             {/* mobile sidebar filter */}
             <div className={`transition-div ${toggled ? 'open' : 'closed'} overflow-auto absolute top-0 z-50`}>
-                <div className="bg-white p-4 shadow-md min-h-screen">
-                    {/* close div */}
+                <div className="bg-white p-4 shadow-md min-h-screen   z-[1000]">
                     <div className='flex items-center justify-end'>
+                        {/* apply filter button */}
+                    {
+                        priceFilter.length > 0 || genderFilter.length > 0 || colorFilter.length > 0 ?
+                             <div onClick={() => {
+                                setToggled(false)
+                                loadingFunction()
+                             }}
+                             className='bg-black w-[80%]  mx-auto text-white p-2 rounded-2xl flex items-center justify-center'>
+                                Apply Filter
+                            </div>
+                            : ""
+                    }
+                     {/* close div */}
                         <div onClick={() => setToggled(false)}
                             className='bg-black text-white p-1  w-fit rounded-full text-xl font-bold'>
                             <RxCross2 />
@@ -215,6 +267,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                                             <input
                                                 className='outline-none border border-black w-5 h-5'
                                                 type='checkbox'
+                                                onChange={() => handleGenderFilter(item.gender)}
                                             />
                                             <p>{item.gender}</p>
                                         </label>
@@ -233,6 +286,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                                             <input
                                                 className='outline-none border border-black w-5 h-5'
                                                 type='checkbox'
+                                                onChange={() => handlePriceFilter(item.price)}
                                             />
                                             <p>{item.price}</p>
                                         </label>
@@ -246,13 +300,15 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                             <div className='flex flex-row flex-wrap '>
                                 {
                                     ProColor.map((item, index) => {
-                                        return <div
+                                        return <div onClick={() => handleColorFilter(item.colorName)}
                                             className='flex flex-col justify-center items-center w-[32%] '
                                             key={index}>
                                             <div className={`w-[25px] h-[25px] rounded-full ${item.color}
-             border-black border flex items-center justify-center text-xl
-              ${item.colorName === "White" ? "text-black" : "text-white"}`}>
-
+                                              border-black border flex items-center justify-center text-xl
+                                                ${item.colorName === "White" ? "text-black" : "text-white"}`}>
+                                                {
+                                                    colorFilter.includes(item.colorName) ? <AiOutlineCheck /> : ""
+                                                }
                                             </div>
 
                                             <p>{item.colorName}</p>
@@ -265,7 +321,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
 
                         <div className=' flex flex-col gap-1 py-4 pb-24'>
                             <h1 className='text-xl font-semibold items-start pb-3'>Ratings</h1>
-                            <div className='flex flex-row flex-wrap '>
+                            <div className='flex flex-col gap-2 flex-wrap '>
                                 {
                                     proRating.map((item, index) => {
                                         return <div className='flex '
@@ -284,6 +340,7 @@ const FilterSidebar = ({ toggled, setToggled }) => {
                         </div>
 
                     </div>
+                    
 
                 </div>
             </div>
