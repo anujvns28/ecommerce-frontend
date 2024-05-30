@@ -5,7 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 import { getAllSubCategoriesProduct } from '../../service/operation/subCategory';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { productLoading, setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product';
+import {  setFilteredProduct, setSubCategory } from '../../slice/Product';
 
 
 const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
@@ -13,24 +13,21 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
     const [genderFilter, setGenderFilter] = useState([]);
     const [priceFilter, setPriceFilter] = useState([]);
     const [colorFilter, setColorFilter] = useState([]);
-    const [allShouse,setAllShouse] = useState();
-    const { allProduct,filteredProduct } = useSelector((state) => state.product)
-    const [productFilter, setProductFilter] = useState();
+    const { allProduct,filteredProduct, } = useSelector((state) => state.product)
     const [serarchParams,setSearchParams] = useSearchParams();
 
     const dispatch = useDispatch();
-    const location = useLocation();
 
-
+    
     const fetchProducts = async () => {
         const result = await getAllSubCategoriesProduct(subCategoryId);
         if (result) {
             dispatch(setSubCategory(result.data));
-            dispatch(setFilteredProduct(result.data.product))
-            dispatch(setTotalProduct(result.data.product))
-            setAllShouse(result.data)
         }
+        
     }
+
+    console.log(allProduct,"all product ")
 
     const handleGenderFilter = (gender) => {
         const genders = [...genderFilter];
@@ -41,7 +38,16 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
             genders.push(gender);
         }
         setGenderFilter(genders)
-        setSearchParams({"gender":genders.join(',')})
+        if(genders.length == 0){
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.delete('gender');
+            setSearchParams(newSearchParams)
+        }else{
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.set('gender', genders);
+            setSearchParams(newSearchParams)
+        }
+       
     }
 
     const handlePriceFilter = (price) => {
@@ -53,6 +59,15 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
             amouts.push(price);
         }
         setPriceFilter(amouts)
+        if(amouts.length == 0){
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.delete('price');
+            setSearchParams(newSearchParams)
+        }else{
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.set('price', amouts);
+            setSearchParams(newSearchParams)
+        }
     }
 
     const handleColorFilter = (color) => {
@@ -64,6 +79,15 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
             colors.push(color);
         }
         setColorFilter(colors)
+        if(colors.length == 0){
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.delete('color');
+            setSearchParams(newSearchParams)
+        }else{
+            const newSearchParams = new URLSearchParams(serarchParams.toString());
+            newSearchParams.set('color', colors);
+            setSearchParams(newSearchParams)
+        }
     }
 
     
@@ -93,9 +117,10 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
         }
 
         // gender base filter
-        if (genderFilter.length > 0) {
+        if (genderFilter.length > 0 ) {
+            console.log("comming in gender filter")
             let products = [];
-            const shouse = filteredShouse ? filteredShouse : allShouse;
+            const shouse = filteredShouse ? filteredShouse : allProduct;
             genderFilter.map((gender) => {
                 shouse.map((item) => {
                     if (item.forWhom == gender) {
@@ -103,6 +128,7 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
                     }
                 });
             })
+            console.log(products,"this is gendef filter product")
             dispatch(setFilteredProduct(products))
             filteredShouse = [...products];
         }
@@ -127,15 +153,27 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
 
     const checkFilters = () => {
         const genders = serarchParams.get("gender")
+        const price = serarchParams.get("price");
+        const color = serarchParams.get("color")
         if(genders){
            setGenderFilter(genders.split(","));
         }
+        if(price){
+            setPriceFilter(price.split(","));
+         }
+        if(color){
+            setColorFilter(color.split(","))
+        } 
+        
     }
 
+    
+
     useEffect(() => {
-       if(allShouse){
+   
         filter()
-       }
+       
+    
     }, [genderFilter, colorFilter, priceFilter])
 
     useEffect(() => {
@@ -143,7 +181,7 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
         checkFilters()
     }, [])
 
-
+    console.log(genderFilter,"this is gender filter")
     return (
         <div className='w-full h-full  '>
             <div className='max-w-[17%] sticky top-6 min-w-[250px] hidden lg:block  h-screen z-10  border p-4 overflow-y-scroll bg-scroll '>
@@ -178,6 +216,7 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
                                         className='outline-none border border-black w-5 h-5'
                                         type='checkbox'
                                         onChange={() => handlePriceFilter(item.price)}
+                                        checked={priceFilter.includes(item.price) ? true : false}
                                     />
                                     <p>{item.price}</p>
                                 </label>
