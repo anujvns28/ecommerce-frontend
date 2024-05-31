@@ -18,3 +18,6 @@ export const subCtegoryEndPoints = {
     FETCH_SUBCATEGORY_WISE_PRODUCT_API: BASE_URL + "/subCategory/subCategoryProduct"
 }
 
+export const productEndPoints = {
+    GET_SINGLE_PRODUCT_API : BASE_URL + "/product/getSingleProduct"
+}
