@@ -71,3 +71,15 @@ export async function signUp(data,navigate,dispatch) {
     }
     dispatch(setAuthLoading(false))
   }  
+
+  // log out
+
+export const logout = (dispatch,navigate) =>{
+  dispatch(setToken(null))
+  dispatch(setUser(null))
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  
+  toast.success("Loghout Successfully")
+  navigate("/")
+}

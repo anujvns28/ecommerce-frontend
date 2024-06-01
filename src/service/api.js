@@ -21,3 +21,7 @@ export const subCtegoryEndPoints = {
 export const productEndPoints = {
     GET_SINGLE_PRODUCT_API : BASE_URL + "/product/getSingleProduct"
 }
+
+export const profileEndPoints = {
+    UPDATE_PROFILE_API : BASE_URL + "/auth/updateProfile"
+}

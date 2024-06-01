@@ -8,6 +8,8 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import SubCategories from './pages/SubCategories';
 import SingleProduct from './pages/SingleProduct';
+import Profile from './pages/Profile';
+import ProfileInfo from './components/core/profile/ProfileInfo';
 
 function App() {
   return (
@@ -20,6 +22,11 @@ function App() {
         <Route path='/verify-email' element={<VeryfyEmail/>}/>
         <Route path='/products/:categoryId/:subCategoryId' element={<SubCategories/>} />
         <Route path='/shouse/:productId' element={<SingleProduct/>} />
+
+        <Route  element={<Profile/>} > 
+      <Route path={"my-profile/view-profile"} element={<ProfileInfo/>} />
+     
+      </Route>
       </Routes>
 
       <Footer/>

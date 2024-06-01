@@ -307,6 +307,7 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
                                                 className='outline-none border border-black w-5 h-5'
                                                 type='checkbox'
                                                 onChange={() => handleGenderFilter(item.gender)}
+                                                checked={genderFilter.includes(item.gender) ? true : false}
                                             />
                                             <p>{item.gender}</p>
                                         </label>
@@ -326,6 +327,7 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
                                                 className='outline-none border border-black w-5 h-5'
                                                 type='checkbox'
                                                 onChange={() => handlePriceFilter(item.price)}
+                                                checked={priceFilter.includes(item.price) ? true : false}
                                             />
                                             <p>{item.price}</p>
                                         </label>

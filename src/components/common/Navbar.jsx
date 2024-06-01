@@ -1,28 +1,104 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from "../../assets/logo.svg"
 import { AiOutlineDown } from "react-icons/ai"
 import { LiaUser } from "react-icons/lia"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { getAllCategories } from '../../service/operation/category'
 import { HiArrowLongRight } from "react-icons/hi2"
+import { BiLogOut } from "react-icons/bi"
+import { AiOutlineUser } from "react-icons/ai"
+import { VscGift } from "react-icons/vsc"
+import { AiOutlineHeart } from "react-icons/ai"
+import { MdAdd } from "react-icons/md"
+import { RxDashboard } from "react-icons/rx"
+import { logout } from '../../service/operation/auth'
+
+
 
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.profile)
   const [toggled, setToggled] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [showUserLinks, setShowUserLinks] = useState(false)
+
+  const dispatch = useDispatch();
+
+  const userLinksRef = useRef();
+
+  const buyerLinks = [
+    {
+      id: 1,
+      name: "My Profile",
+      icon: <AiOutlineUser />,
+      link: "/my-profile/view-profile",
+    },
+    {
+      id: 2,
+      name: "Orders",
+      icon: <VscGift />,
+      link: "/orders",
+    },
+    {
+      id: 3,
+      name: "Wishlist",
+      icon: <AiOutlineHeart />,
+      link: "/my-profile/wishlist",
+    },
+  ]
+
+  const sellerLikns = [
+    {
+      id: 1,
+      name: "My Profile",
+      icon: <AiOutlineUser />,
+      link: "/my-profile/view-profile",
+    },
+    {
+      id: 2,
+      name: "Products",
+      icon: <VscGift />,
+      link: "/products",
+    },
+    {
+      id: 3,
+      name: "Add Products",
+      icon: <MdAdd />,
+      link: "/create-product",
+    },
+    {
+      id: 4,
+      name: "Dashboard",
+      icon: <RxDashboard />,
+      link: "/dashboard",
+    },
+  ]
 
   const navigate = useNavigate();
 
   const fetchAllCategory = async () => {
     const result = await getAllCategories();
     if (result) {
-      const category = result.data.filter((item)=>item.subCategories.length>0);
+      const category = result.data.filter((item) => item.subCategories.length > 0);
       setCategories(category)
     }
   }
+
+  // close otherliks div
+  window.addEventListener("click", (e) => {
+    if (e.target == userLinksRef.current) {
+      setShowUserLinks(true)
+    } else {
+      setShowUserLinks(false)
+    }
+  })
+
+  console.log(user,"this is user")
+
+
 
   useEffect(() => {
     fetchAllCategory();
@@ -65,11 +141,11 @@ const Navbar = () => {
                           <div className='absolute p-4 rounded-md bg-slate-300 subCategories'>
                             {
                               category.subCategories
-                              .map((subCategory) => {
-                                return <div className='hover:bg-slate-400  py-4 px-4 rounded-md relative'>
-                                  {subCategory.name}
-                                </div>
-                              })
+                                .map((subCategory) => {
+                                  return <div className='hover:bg-slate-400  py-4 px-4 rounded-md relative'>
+                                    {subCategory.name}
+                                  </div>
+                                })
                             }
                           </div>
                         </div>
@@ -99,6 +175,71 @@ const Navbar = () => {
                 </Link>
               </p>
             }
+
+            {
+              user && <div>
+                <div onClick={() => setShowUserLinks(!showUserLinks)}
+                  className='w-[35px] h-[35px] cursor-pointer rounded-full '>
+                  <img ref={userLinksRef}
+                    className='rounded-full' src={user.image} />
+                </div>
+
+                {/* links */}
+                {
+                  showUserLinks &&
+                  <div
+                    className='relative w-full  -translate-x-[130px] z-50 hidden lg:block '>
+                    {
+                      user.accountType !== "Buyer"
+                        ? <div className='p-3 rounded-md bg-slate-400 absolute z-50 w-[150px]'>
+                          {
+                            buyerLinks.map((links) => {
+                              return <Link to={links.link} >
+                                <div onClick={() => setShowUserLinks(!showUserLinks)}
+                                  className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-500 rounded-md'
+                                  key={links.id}
+                                >
+                                  <p>{links.name}</p>
+                                  <p>{links.icon}</p>
+                                </div>
+                              </Link>
+                            })
+                          }
+                          <div onClick={() => logout(dispatch,navigate)}
+                            className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'>
+                            <p>Logout</p>
+                            <p><BiLogOut /></p>
+                          </div>
+                        </div>
+                        : <div>
+                          {
+                            <div className='p-3 rounded-md bg-slate-300 absolute z-50 w-[170px]'>
+                              {
+                                sellerLikns.map((links) => {
+                                  return <Link to={links.link}>
+                                    <div onClick={() => setShowUserLinks(!showUserLinks)}
+                                      className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'
+                                      key={links.id}>
+                                      <p>{links.name}</p>
+                                      <p>{links.icon}</p>
+                                    </div>
+                                  </Link>
+                                })
+                              }
+                              <div onClick={() => logout(dispatch,navigate)}
+                                className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'>
+                                <p>Logout</p>
+                                <p><BiLogOut /></p>
+                              </div>
+                            </div>
+
+                          }
+                        </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
           </div>
         </div>
         {/* mobile device */}
@@ -108,6 +249,11 @@ const Navbar = () => {
               <Link to={"/login"}> Log in
               </Link>
             </p>
+          }
+          {
+            user && <div className='w-[30px] h-[30px]  rounded-full '>
+              <img className='rounded-full' src={user.image} />
+            </div>
           }
 
           <p onClick={() => setToggled(!toggled)}
@@ -138,36 +284,92 @@ const Navbar = () => {
             <p className='text-sm px-3 pt-2 text-black font-bold'>Categories</p>
 
             {
-              categories ? 
-              categories.map((category) => {
-                return <SubMenu label={category.categoryName}>
-                       {
-                        category.subCategories
+              categories ?
+                categories.map((category) => {
+                  return <SubMenu label={category.categoryName}>
+                    {
+                      category.subCategories
                         .map((subCategory) => {
-                         return <MenuItem > {subCategory.name}</MenuItem>
+                          return <MenuItem > {subCategory.name}</MenuItem>
                         })
-                       }
+                    }
                   </SubMenu>
-              })
-              : <div className='custom-loader'></div>
+                })
+                : <div className='custom-loader'></div>
             }
 
             <p className='text-sm px-3 pt-2 text-black font-bold'>Pages</p>
-            <MenuItem onClick={() => {
-              navigate("/login")
-              setToggled(false)
-            }} >
-              Log in
-            </MenuItem>
-            <MenuItem onClick={() => {
-              navigate("/signup")
-              setToggled(false)
-            }}>
-            Signup
-            </MenuItem>
-            <p className='text-sm px-3 pt-2 text-black font-bold'>My Stuf</p>
+
+            {
+              token ?
+                <div>
+                  {
+                    user.accountType !== "Buyer" ?
+                      buyerLinks.map((links) => {
+                        return <MenuItem>
+                          <Link to={links.link}>
+                            <div onClick={() => setToggled(false)}
+                              className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-500 rounded-md'
+                              key={links.id}
+                            >
+                              <p>{links.name}</p>
+                              <p>{links.icon}</p>
+                            </div>
+                          </Link>
+                        </MenuItem>
+                      })
+
+                      : sellerLikns.map((links) => {
+                        return <MenuItem>
+                          <Link to={links.link}>
+                            <div onClick={() => setToggled(false)}
+                              className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'
+                              key={links.id}>
+                              <p>{links.name}</p>
+                              <p>{links.icon}</p>
+                            </div>
+                          </Link>
+                        </MenuItem>
+                      })
+
+                  }
+                </div>
+                :
+                <div>
+                  <MenuItem onClick={() => {
+                    navigate("/login")
+                    setToggled(false)
+                  }} >
+                    Log in
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    navigate("/signup")
+                    setToggled(false)
+                  }}>
+                    Signup
+                  </MenuItem>
+                </div>
+            }
+
+            {
+              token && <div>
+                <p className='text-sm px-3 pt-2 text-black font-bold'>My Stuf</p>
             <MenuItem>Cart</MenuItem>
             <MenuItem>Wishlist</MenuItem>
+              </div>
+            }
+
+            {
+              token && <MenuItem onClick={() => {
+                logout(dispatch,navigate)
+                setToggled(false)
+              }}
+              className='text-center  '>
+                <div className='rounded-md bg-black text-white py-2 '>
+                Logout
+                </div>
+                </MenuItem>
+            }
           </Menu>
         </Sidebar>
       </div>
