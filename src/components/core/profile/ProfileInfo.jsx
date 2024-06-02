@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateUserProfile } from '../../../service/operation/profile';
+import UpdateProfileImg from './UpdateProfileImg';
 
 const ProfileInfo = () => {
-  const {user} = useSelector((state) => state.profile);
-  const {register,setValue,getValues,handleSubmit} = useForm()
+  const {user,userLoading} = useSelector((state) => state.profile);
+  const {register,setValue,getValues,handleSubmit} = useForm();
+  const dispatch = useDispatch();
+
+  console.log(userLoading,"this is loading")
   
     const gender = [
         {gender:"Male"},
         {gender:"Female"}
     ]
 
+   
+
     const isInformationUpdated = (data) => {
       if(data.firstName !== user.firstName ||
         data.lastName !== user.lastName ||
-        data.gender !== user.gender ||
-        data.phoneNumber !== user.phoneNumber ||
-        data.about !== user.about
+        data.gender !== user.additionalInfo.gender ||
+        data.contactNumber !== user.additionalInfo.contactNumber ||
+        data.about !== user.additionalInfo.about ||
+        data.dateOfBirth !== user.additionalInfo.dateOfBirth
       ){
         return true
       }else{
@@ -26,9 +34,10 @@ const ProfileInfo = () => {
     }
 
     const handleForm = async(data) => {
+      setValue("userId",user._id);
       const result = isInformationUpdated(data);
      if(result){
-      // make update call
+      await updateUserProfile(data,dispatch)
      }else{
       toast.error("No updation made")
      }
@@ -37,12 +46,17 @@ const ProfileInfo = () => {
     useEffect(() => {
      setValue("firstName",user.firstName);
      setValue("lastName",user.lastName);
-     setValue("gender",user.gender);
-     setValue("dateOfBirth",user.dateOfBirth);
-     setValue("phoneNumber",user.phoneNumber);
-     setValue("about",user.about)
+     setValue("gender",user.additionalInfo.gender);
+     setValue("dateOfBirth",user.additionalInfo.dateOfBirth);
+     setValue("contactNumber",user.additionalInfo.contactNumber);
+     setValue("about",user.additionalInfo.about)
     },[])
 
+    if(userLoading){
+      return <div className=' border h-full flex items-center justify-center'>
+        <div className='custom-loader'></div>
+      </div>
+    }
    
   return (
     <div>
@@ -101,7 +115,7 @@ const ProfileInfo = () => {
             <input
               className='w-full border border-black outline-none p-3 rounded-md text-xl'
               type = "string"
-              {...register("phoneNumber")}
+              {...register("contactNumber")}
             >
             </input>
           </label>
@@ -118,6 +132,8 @@ const ProfileInfo = () => {
 
           <button className='py-2 px-4 font-semibold bg-yellow-400 rounded-md text-black items-start w-[20%]'>Update</button>
       </form>
+
+     
     </div>
   )
 }

@@ -23,5 +23,8 @@ export const productEndPoints = {
 }
 
 export const profileEndPoints = {
-    UPDATE_PROFILE_API : BASE_URL + "/auth/updateProfile"
+    UPDATE_PROFILE_API : BASE_URL + "/auth/updateProfile",
+    UPDATE_PROFILE_IMG : BASE_URL + "/auth/updateProfileImg",
+    ADD_ADDRESS : BASE_URL + "/auth/addAddress",
+    DELETE_ADDRESS : BASE_URL + "/auth/deleteAddres",
 }

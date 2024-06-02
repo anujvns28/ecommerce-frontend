@@ -96,10 +96,7 @@ const Navbar = () => {
     }
   })
 
-  console.log(user,"this is user")
-
-
-
+  
   useEffect(() => {
     fetchAllCategory();
   }, [])

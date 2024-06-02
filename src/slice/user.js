@@ -12,13 +12,13 @@ export const profileSlice = createSlice({
     setUser(state,value){
         state.user = value.payload
     },
-    userLoading(state,value){
-        state.authLoading = value.payload
+    setUserLoading(state,value){
+        state.userLoading = value.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {setUser,userLoading} = profileSlice.actions
+export const {setUser,setUserLoading} = profileSlice.actions
 
 export default profileSlice.reducer

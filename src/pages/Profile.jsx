@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { MdSwitchAccount } from "react-icons/md";
+import { MdEdit, MdEmojiFoodBeverage, MdSwitchAccount } from "react-icons/md";
 import { CiImageOn } from "react-icons/ci";
 import { IoMdSettings } from "react-icons/io";
 import { MdAddLocation } from "react-icons/md";
@@ -8,6 +8,8 @@ import { GiRunningShoe } from "react-icons/gi";
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { AiOutlineHeart } from "react-icons/ai"
 import {AiFillCaretDown} from "react-icons/ai"
+import UpdateProfileImg from '../components/core/profile/UpdateProfileImg';
+import { useState } from 'react';
 
 
 const Profile = () => {
@@ -19,11 +21,6 @@ const Profile = () => {
       logo: <MdSwitchAccount/>,
       link:"/my-profile/view-profile"
     },
-    {
-        name : "Update Profile Image",
-        logo: <CiImageOn/>,
-        link:"my-profile/update-profileImg"
-      },
     {
       name : "Add Address",
       logo: <MdAddLocation/>,
@@ -47,6 +44,7 @@ const Profile = () => {
   ]
    
   const { user } = useSelector((state) => state.profile);
+  const [changeImage,setChangeImg] = useState(false);
   const location = useLocation();
   
   const matchRoute = (data) => {
@@ -60,8 +58,9 @@ const Profile = () => {
           ? <div className='flex flex-row gap-4'>
             <div className=' w-[30%] h-screen p-4 flex flex-col gap-3'>
               <div className='w-full  border border-black flex flex-row gap-2 p-3 '>
-                <div className='' >
-                  <img className='w-[60px] h-[60px] rounded-full'
+                <div className='  cursor-pointer ' >
+                  <img onClick={() => setChangeImg(true)}
+                  className='w-[60px] h-[60px] rounded-full '
                     src={user.image} />
                 </div>
                 <div className='p-2'>
@@ -120,15 +119,19 @@ const Profile = () => {
                   })
                 }
                </details>
+               {
+                changeImage && <UpdateProfileImg setChangeImg={setChangeImg}/>
+               }
 
               </div>
             </div>
-            <div className='border border-black w-[75%]  p-6 flex flex-col gap-3'>
+            <div className='border border-black w-[75%]  my-2 p-6 flex flex-col gap-3'>
            <Outlet  />
             </div>
           </div>
           : <div className='w-full h-full flex items-center justify-center'>Loading...</div>
       }
+     
     </div>
   )
 }

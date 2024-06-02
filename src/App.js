@@ -10,6 +10,7 @@ import SubCategories from './pages/SubCategories';
 import SingleProduct from './pages/SingleProduct';
 import Profile from './pages/Profile';
 import ProfileInfo from './components/core/profile/ProfileInfo';
+import Address from './components/core/profile/Address';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
 
         <Route  element={<Profile/>} > 
       <Route path={"my-profile/view-profile"} element={<ProfileInfo/>} />
-     
+      <Route path={"my-profile/add-address"} element={<Address/>} />
       </Route>
       </Routes>
 
