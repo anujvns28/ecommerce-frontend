@@ -14,7 +14,9 @@ import { VscGift } from "react-icons/vsc"
 import { AiOutlineHeart } from "react-icons/ai"
 import { MdAdd } from "react-icons/md"
 import { RxDashboard } from "react-icons/rx"
+import { IoSettingsOutline } from "react-icons/io5";
 import { logout } from '../../service/operation/auth'
+import useGetViewPort from '../../hook/useGetViewPort'
 
 
 
@@ -24,6 +26,7 @@ const Navbar = () => {
   const [toggled, setToggled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showUserLinks, setShowUserLinks] = useState(false)
+  const viewport = useGetViewPort();
 
   const dispatch = useDispatch();
 
@@ -32,9 +35,9 @@ const Navbar = () => {
   const buyerLinks = [
     {
       id: 1,
-      name: "My Profile",
-      icon: <AiOutlineUser />,
-      link: "/my-profile/view-profile",
+      name: viewport < 800 ? "Setting" : "My Profile",
+      icon: viewport < 800 ? <IoSettingsOutline/> : <AiOutlineUser />,
+      link: viewport < 800 ? "/my-profile" : "/my-profile/view-profile",
     },
     {
       id: 2,
@@ -53,9 +56,9 @@ const Navbar = () => {
   const sellerLikns = [
     {
       id: 1,
-      name: "My Profile",
-      icon: <AiOutlineUser />,
-      link: "/my-profile/view-profile",
+      name: viewport < 800 ? "Setting" : "My Profile",
+      icon: viewport < 800 ? <IoSettingsOutline/> : <AiOutlineUser />,
+      link: viewport < 800 ? "/my-profile" : "/my-profile/view-profile",
     },
     {
       id: 2,
@@ -176,9 +179,9 @@ const Navbar = () => {
             {
               user && <div>
                 <div onClick={() => setShowUserLinks(!showUserLinks)}
-                  className='w-[35px] h-[35px] cursor-pointer rounded-full '>
+                  className='w-[35px] h-[35px] object-cover cursor-pointer rounded-full '>
                   <img ref={userLinksRef}
-                    className='rounded-full' src={user.image} />
+                    className='rounded-full w-[35px] h-[35px] object-cover' src={user.image} />
                 </div>
 
                 {/* links */}
@@ -249,7 +252,7 @@ const Navbar = () => {
           }
           {
             user && <div className='w-[30px] h-[30px]  rounded-full '>
-              <img className='rounded-full' src={user.image} />
+              <img className='rounded-full object-cover w-[30px] h-[30px]' src={user.image} />
             </div>
           }
 

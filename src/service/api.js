@@ -27,4 +27,6 @@ export const profileEndPoints = {
     UPDATE_PROFILE_IMG : BASE_URL + "/auth/updateProfileImg",
     ADD_ADDRESS : BASE_URL + "/auth/addAddress",
     DELETE_ADDRESS : BASE_URL + "/auth/deleteAddres",
+    EDIT_ADDRESS : BASE_URL + "/auth/editAddress",
+    UPDATE_PASSWORD : BASE_URL + "/auth/updatePassword"
 }

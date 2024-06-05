@@ -1,24 +1,25 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { addAddress } from '../../../service/operation/profile';
+import { addAddress, editAddress } from '../../../service/operation/profile';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 
 const AddAddress = ({setAddAddress,addressData}) => {
     const {user,userLoading} = useSelector((state) => state.profile);
-    const { register, setValue, getValues, handleSubmit, formState: { errors } } = useForm();
+    const { register, setValue, getValues,reset, handleSubmit, formState: { errors } } = useForm();
     const dispatch = useDispatch();
 
     const handleForm = async (data) => {
+       
       if(!addressData){
-        setValue("userId",user._id);
         console.log(data)
         await addAddress(data,dispatch);
         setAddAddress(false);
       }else{
         if(isUpdated()){
-            // make edit call
+            await editAddress(data,dispatch);
+            setAddAddress(false)
         }else{
             toast.error("no updation made")
         }
@@ -50,22 +51,29 @@ const AddAddress = ({setAddAddress,addressData}) => {
         setValue("landmark",addressData.landmark)
         setValue("alternatePhoneNumber",addressData.alternatePhoneNumber)
         setValue("state",addressData.state)
+        setValue("addresId",addressData._id)
+      }else{
+        reset();
       }
     },[addressData])
+
+    useEffect(() => {
+        setValue("userId",user._id);
+    },[])
     
 
     return (
         <div className='w-full h-full'>
           {
             userLoading ? 
-            <div className='w-full h-full flex items-center justify-center'>
+            <div className='w-full h-[300px] flex items-center  justify-center'>
                 <div className='custom-loader'></div>
             </div>
             :  <form onSubmit={handleSubmit(handleForm)} >
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>Name</p>
+                <p className='lg:text-xl font-semibold pb-1'>Name</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='Enter Your Name'
                     {...register("name", { required: true })}
@@ -78,9 +86,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>Mobile Number</p>
+                <p className='lg:text-xl font-semibold pb-1'>Mobile Number</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='Enter Phone Number'
                     {...register("phoneNumber", { required: true })}
@@ -93,9 +101,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>Pincode</p>
+                <p className='lg:text-xl font-semibold pb-1'>Pincode</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='Enter Pincode'
                     {...register("pincode", { required: true })}
@@ -108,9 +116,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>Locality</p>
+                <p className='lg:text-xl font-semibold pb-1'>Locality</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='Locality'
                     {...register("locality", { required: true })}
@@ -123,11 +131,11 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-full'>
-                <p className='text-xl font-semibold '>Address</p>
+                <p className='lg:text-xl font-semibold '>Address</p>
                 <textarea
                     type="string"
-                    className='w-full h-[200px] border border-black outline-none p-3 rounded-md text-xl'
-                    placeholder='Enter Product Details'
+                    className='w-full lg:h-[200px] border border-black outline-none p-3 rounded-md lg:text-xl'
+                    placeholder='Enter Address'
                     {...register("address", { required: true })}
                 />
                 {
@@ -138,9 +146,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>City</p>
+                <p className='lg:text-xl font-semibold pb-1'>City</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='City'
                     {...register("city", { required: true })}
@@ -153,9 +161,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>State</p>
+                <p className='lg:text-xl font-semibold pb-1'>State</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='State'
                     {...register("state", { required: true })}
@@ -168,9 +176,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>LandMark</p>
+                <p className='lg:text-xl font-semibold pb-1'>LandMark</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='landmark'
                     {...register("landmark", { required: true })}
@@ -183,9 +191,9 @@ const AddAddress = ({setAddAddress,addressData}) => {
             </label>
 
             <label className='w-[49%]'>
-                <p className='text-xl font-semibold pb-1'>Alternate PhoneNumber</p>
+                <p className='lg:text-xl font-semibold pb-1'>Alternate PhoneNumber</p>
                 <input
-                    className='w-full border border-black outline-none p-3 rounded-md text-xl'
+                    className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
                     type="string"
                     placeholder='Phone Number(Optional)'
                     {...register("alternatePhoneNumber", { required: true })}
@@ -197,7 +205,7 @@ const AddAddress = ({setAddAddress,addressData}) => {
                 }
             </label>
 
-            <button className='px-3 py-2 bg-yellow-400 rounded-md mt-2'>{addressData ? "Edit":"submit"}</button>
+            <button className='px-3 py-2  bg-yellow-400 rounded-md mt-2'>{addressData ? "Edit":"submit"}</button>
 
         </form>
           }

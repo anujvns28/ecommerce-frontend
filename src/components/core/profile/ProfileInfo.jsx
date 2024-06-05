@@ -4,14 +4,16 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUserProfile } from '../../../service/operation/profile';
 import UpdateProfileImg from './UpdateProfileImg';
+import useGetViewPort from '../../../hook/useGetViewPort';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileInfo = () => {
   const {user,userLoading} = useSelector((state) => state.profile);
   const {register,setValue,getValues,handleSubmit} = useForm();
   const dispatch = useDispatch();
+  const viewport = useGetViewPort();
+  const navigate = useNavigate();
 
-  console.log(userLoading,"this is loading")
-  
     const gender = [
         {gender:"Male"},
         {gender:"Female"}
@@ -34,7 +36,6 @@ const ProfileInfo = () => {
     }
 
     const handleForm = async(data) => {
-      setValue("userId",user._id);
       const result = isInformationUpdated(data);
      if(result){
       await updateUserProfile(data,dispatch)
@@ -44,6 +45,7 @@ const ProfileInfo = () => {
     }
 
     useEffect(() => {
+      setValue("userId",user._id);
      setValue("firstName",user.firstName);
      setValue("lastName",user.lastName);
      setValue("gender",user.additionalInfo.gender);
@@ -52,21 +54,25 @@ const ProfileInfo = () => {
      setValue("about",user.additionalInfo.about)
     },[])
 
+    
+
     if(userLoading){
       return <div className=' border h-full flex items-center justify-center'>
         <div className='custom-loader'></div>
       </div>
     }
+
+
    
   return (
     <div>
       <form onSubmit={handleSubmit(handleForm)}
-      className='flex flex-col gap-3'>
-     <div className='flex flex-row gap-2'>
-     <label className='w-[49%]'>
-            <p className='text-xl font-semibold pb-1'>First Name</p>
+      className='flex flex-col gap-3 lg:w-full w-[90%] mx-auto'>
+     <div className='flex flex-row  gap-2'>
+     <label className='w-[49%] '>
+            <p className='lg:text-xl  font-semibold pb-1'>First Name</p>
             <input
-             className='w-full border border-black outline-none p-3 rounded-md text-xl'
+             className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
               type="string"
               placeholder=''
              {...register("firstName")}
@@ -74,9 +80,9 @@ const ProfileInfo = () => {
           </label>
 
           <label className='w-[49%]'>
-            <p className='text-xl font-semibold pb-1'>Last Name</p>
+            <p className='lg:text-xl font-semibold pb-1'>Last Name</p>
             <input
-             className='w-full border border-black outline-none p-3 rounded-md text-xl'
+             className='w-full border border-black outline-none p-3 rounded-md g:text-xl'
               type="string"
               placeholder=''
               {...register("lastName",)}
@@ -88,9 +94,9 @@ const ProfileInfo = () => {
 
      <div className='flex flex-row gap-2'>
      <label className='w-[49%]'>
-            <p className='text-xl font-semibold pb-1'>Select Gender</p>
+            <p className='lg:text-xl font-semibold pb-1'>Select Gender</p>
             <select
-              className='w-full border border-black outline-none p-3 rounded-md text-xl'
+              className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
               {...register("gender")}
             >
               {
@@ -100,9 +106,9 @@ const ProfileInfo = () => {
           </label>
 
           <label className='w-[49%]'>
-            <p className='text-xl font-semibold pb-1'>Date Of Birth</p>
+            <p className='lg:text-xl font-semibold pb-1'>Date Of Birth</p>
             <input
-              className='w-full border border-black outline-none p-3 rounded-md text-xl'
+              className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
               type = "date"
               {...register("dateOfBirth")}
             >
@@ -111,9 +117,9 @@ const ProfileInfo = () => {
      </div>
 
          <label className='w-[49%]'>
-            <p className='text-xl font-semibold pb-1'>Phone Number</p>
+            <p className='lg:text-xl font-semibold pb-1'>Phone Number</p>
             <input
-              className='w-full border border-black outline-none p-3 rounded-md text-xl'
+              className='w-full border border-black outline-none p-3 rounded-md lg:text-xl'
               type = "string"
               {...register("contactNumber")}
             >
@@ -121,16 +127,16 @@ const ProfileInfo = () => {
           </label>
 
           <label className='w-full'>
-            <p className='text-xl font-semibold '>About</p>
+            <p className='lg:text-xl font-semibold '>About</p>
             <textarea
               type="string"
-              className='w-full h-[200px] border border-black outline-none p-3 rounded-md text-xl'
+              className='w-full lg:h-[200px] border border-black outline-none p-3 rounded-md lg:text-xl'
               placeholder='Enter Product Details'
               {...register("about")}
             />
           </label>
 
-          <button className='py-2 px-4 font-semibold bg-yellow-400 rounded-md text-black items-start w-[20%]'>Update</button>
+          <button className='py-2 px-4 font-semibold bg-yellow-400 rounded-md text-black items-start lg:w-[20%] w-full'>Update</button>
       </form>
 
      

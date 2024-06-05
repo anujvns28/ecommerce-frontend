@@ -11,6 +11,9 @@ import SingleProduct from './pages/SingleProduct';
 import Profile from './pages/Profile';
 import ProfileInfo from './components/core/profile/ProfileInfo';
 import Address from './components/core/profile/Address';
+import MobileProfile from './pages/MobileProfile';
+import MobileAddress from './pages/MobileAddress';
+import UpdatePassword from './components/core/profile/UpdatePassword';
 
 function App() {
   return (
@@ -27,7 +30,11 @@ function App() {
         <Route  element={<Profile/>} > 
       <Route path={"my-profile/view-profile"} element={<ProfileInfo/>} />
       <Route path={"my-profile/add-address"} element={<Address/>} />
+      <Route path={"my-profile/update-password"} element={<UpdatePassword/>} />
       </Route>
+      <Route path={"/my-profile"} element={<MobileProfile/>} />
+      <Route path={"/add-address"} element={<MobileAddress/>} />
+
       </Routes>
 
       <Footer/>

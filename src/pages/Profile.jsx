@@ -8,6 +8,7 @@ import { GiRunningShoe } from "react-icons/gi";
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { AiOutlineHeart } from "react-icons/ai"
 import {AiFillCaretDown} from "react-icons/ai"
+import { TbPassword } from "react-icons/tb";
 import UpdateProfileImg from '../components/core/profile/UpdateProfileImg';
 import { useState } from 'react';
 
@@ -25,6 +26,11 @@ const Profile = () => {
       name : "Add Address",
       logo: <MdAddLocation/>,
       link:"/my-profile/add-address"
+    },
+    {
+      name : "Update Password",
+      logo: <TbPassword/>,
+      link:"/my-profile/update-password"
     },
   ]
 
