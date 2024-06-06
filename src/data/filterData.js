@@ -107,3 +107,61 @@ exports.gender = [
       rating: '4 ★ & above',
     },
   ]
+
+  exports.size = [
+    {
+      id: 1,
+      size: 'UK 6 (EU 40)',
+    
+    },
+    {
+      id: 1,
+      size: 'UK 6.5',
+    },
+    {
+      id: 1,
+      size: 'UK 7',
+        },
+    {
+      id: 1,
+      size: 'UK 7.5',
+       },
+    {
+      id: 1,
+      size: 'UK 8',
+        },
+    {
+      id: 1,
+      size: 'UK 8.5',
+        },
+    {
+      id: 1,
+      size: 'UK 9',
+        },
+    {
+      id: 1,
+      size: 'UK 9.5',
+       },
+    {
+      id: 1,
+      size: 'UK 10',
+       },
+    {
+      id: 1,
+      size: 'UK 10.5',
+    
+    },
+    {
+      id: 1,
+      size: 'UK 11',
+       },
+    {
+      id: 1,
+      size: 'UK 11.5',
+       },
+    {
+      id: 1,
+      size: 'UK 12',
+    
+    },
+  ]
