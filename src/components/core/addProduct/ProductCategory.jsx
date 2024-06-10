@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getAllCategories } from '../../../service/operation/category';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProductCreatingSteps, setProductInformation } from '../../../slice/Product';
 
 const ProductCategory = () => {
     const [categoryId,setCategoryId] = useState();
@@ -7,17 +9,40 @@ const ProductCategory = () => {
     const [subCategories,setSubCategories] = useState();
     const [company,setCompany] = useState();
 
+    const {productInformation} = useSelector((state) => state.product);
+
+    const dispatch = useDispatch();
+
     const fetchCategory = async () => {
         const result = await getAllCategories();
         if (result) {
           const category = result.data.filter((item) => item.subCategories.length > 0);
           setCategories(category)
-          setCategoryId(category[0]._id)
+          
+          if(productInformation){
+            setCategoryId(productInformation.categoryId);
+        }else{
+            setCategoryId(category[0]._id)
+        }
         }
       }
 
     const handleNext = () => {
         console.log(categoryId,company)
+        dispatch(setProductCreatingSteps(2));
+        const data = {
+            "categoryId" : categoryId,
+            "subCategoryId" : company
+        }
+        dispatch(setProductInformation(data));
+    }
+
+    const isUpdated = () => {
+        if(categoryId !== productInformation.categoryId || company !== productInformation.subCategoryId){
+           return true 
+        }else{
+            return false
+        }
     }
     
     
@@ -35,8 +60,6 @@ const ProductCategory = () => {
     },[categoryId])
 
    
-   
-
     return (
         <div class="flex items-center justify-center w-[1000px] mx-auto max-w-[90%] ">
             <div class="bg-white p-8 rounded-lg shadow-lg w-full pb-12">
@@ -52,7 +75,11 @@ const ProductCategory = () => {
                         {
                             !categories 
                             ?  <option value="">loading..</option>
-                            : categories.map(item =>  <option value={item._id}>{item.categoryName}</option>)   
+                            : categories.map(item => 
+                             <option 
+                             selected={productInformation && productInformation.categoryId == item._id }
+                             value={item._id}>{item.categoryName}
+                             </option>)   
                         }
                     </select>
                 </div>
@@ -66,16 +93,30 @@ const ProductCategory = () => {
                     {
                             !subCategories 
                             ?  <div>Loading...</div>
-                            : subCategories.map(item =>  <option value={item._id}>{item.name}</option>)   
+                            : subCategories.map(item =>  
+                            <option 
+                            selected={productInformation && productInformation.subCategoryId == item._id }
+                            value={item._id}>{item.name}
+                            </option>)   
                         }
                     </select>
                 </div>
                 </div>
 
+               <div className='flex flex-row gap-2 w-full'>
+               {
+                productInformation && 
+                <div class="flex justify-end my-8">
+                    <button onClick={() => dispatch(setProductCreatingSteps(2))}
+                    type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Continue without save</button>
+                </div>
+
+               }
                 <div class="flex justify-end my-8">
                     <button onClick={handleNext}
                     type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Next</button>
                 </div>
+               </div>
             </div>
         </div>
     )
