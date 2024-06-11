@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { FaPlus } from "react-icons/fa6";
+import { useDispatch } from 'react-redux';
+import { setProductCreatingSteps } from '../../../slice/Product';
 
 const ProductImges = () => {
   const [imageCount, setImageCount] = useState([1, 2, 3, 4]);
+  const dispatch = useDispatch();
 
   const handleImage = () => {
     const images = [...imageCount];
@@ -50,8 +53,14 @@ const ProductImges = () => {
             </div>
           </div>
         </div>
+
+        <div className='flex flex-row gap-2 w-full justify-end top-4'>
+        <div onClick={() => dispatch(setProductCreatingSteps(2))} class="flex justify-end">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Back</button>
+        </div>
         <div class="flex justify-end">
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Create Product</button>
+        </div>
         </div>
       </div>
     </div>

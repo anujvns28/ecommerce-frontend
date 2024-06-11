@@ -115,52 +115,52 @@ exports.gender = [
     
     },
     {
-      id: 1,
+      id: 2,
       size: 'UK 6.5',
     },
     {
-      id: 1,
+      id: 3,
       size: 'UK 7',
         },
     {
-      id: 1,
+      id: 4,
       size: 'UK 7.5',
        },
     {
-      id: 1,
+      id: 5,
       size: 'UK 8',
         },
     {
-      id: 1,
+      id: 6,
       size: 'UK 8.5',
         },
     {
-      id: 1,
+      id: 7,
       size: 'UK 9',
         },
     {
-      id: 1,
+      id: 8,
       size: 'UK 9.5',
        },
     {
-      id: 1,
+      id: 9,
       size: 'UK 10',
        },
     {
-      id: 1,
+      id: 10,
       size: 'UK 10.5',
     
     },
     {
-      id: 1,
+      id: 11,
       size: 'UK 11',
        },
     {
-      id: 1,
+      id: 12,
       size: 'UK 11.5',
        },
     {
-      id: 1,
+      id: 13,
       size: 'UK 12',
     
     },
