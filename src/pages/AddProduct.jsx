@@ -11,7 +11,7 @@ const AddProduct = () => {
   return (
     <div class="bg-gray-100 w-full h-full min-h-[85vh]  py-4 ">
 
-      <div className='flex sticky top-0 flex-col justify-center p-2 text-blue-600 border border-blue-600 h-[130px] mx-auto bg-white  rounded-lg shadow-lg w-[1000px] max-w-[90%] mb-3'>
+      <div className='flex sticky top-0 z-50 flex-col justify-center p-2 text-blue-600 border border-blue-600 h-[130px] mx-auto bg-white  rounded-lg shadow-lg w-[1000px] max-w-[90%] mb-3'>
         <h2 class="text-2xl font-bold  text-center pb-2">Create Product</h2>
         <div className='flex items-center justify-between pb-4'>
           <div className='flex flex-col gap-1 items-center justify-center'>

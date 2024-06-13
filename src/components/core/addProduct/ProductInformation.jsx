@@ -24,13 +24,12 @@ const ProductInformation = () => {
   
     const handleSize = (size) => {
        let item = [...sizes];
-       const index = item.findIndex((i) => i.id == size.id);
+       const index = item.findIndex((i) => i == size);
        if(index > -1){
         item.splice(index,1);
        }else{
         item.push(size);
        }
-       console.log(size.id,index)
        setSizes(item);
     }
      
@@ -45,14 +44,14 @@ const ProductInformation = () => {
 
     
     useEffect(() => {
-    //   setValue("categoryId",productInformation.categoryId)
-    //   setValue("subCategoryId",productInformation.subCategoryId);
-    //   setValue("productName",productInformation.productName && productInformation.productName )
-    //   setValue("productDescription",productInformation.productDescription && productInformation.productDescription )
-    //   setValue("price",productInformation.price && productInformation.price )
-    //   setValue("disPrice",productInformation.disPrice && productInformation.disPrice )
-    //   setValue("gender",productInformation.gender && productInformation.gender )
-    //   setValue("color",productInformation.color && productInformation.color )
+      setValue("categoryId",productInformation.categoryId)
+      setValue("subCategoryId",productInformation.subCategoryId);
+      setValue("productName",productInformation.productName && productInformation.productName )
+      setValue("productDescription",productInformation.productDescription && productInformation.productDescription )
+      setValue("price",productInformation.price && productInformation.price )
+      setValue("disPrice",productInformation.disPrice && productInformation.disPrice )
+      setValue("gender",productInformation.gender && productInformation.gender )
+      setValue("color",productInformation.color && productInformation.color )
       setValue("size",productInformation.size && productInformation.size )
 
       
@@ -63,7 +62,7 @@ const ProductInformation = () => {
                 <h2 class="text-2xl font-bold pb-4 text-center">Product Information</h2>
                <form onSubmit={handleSubmit(handleNext)}>
                <div class="space-y-4 w-full">
-                    {/* <div>
+                    <div>
                         <label for="productName" class="block text-sm font-medium text-gray-700">Product Name</label>
                         <input
                             type="text"
@@ -77,8 +76,8 @@ const ProductInformation = () => {
                                 <p className='text-blue-500'>Product name is required</p>
                             </div>
                         }
-                    </div> */}
-{/* 
+                    </div>
+
                     <div>
                         <label for="productDescription" class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea
@@ -94,9 +93,9 @@ const ProductInformation = () => {
                                 <p className='text-blue-500'>product Description is required</p>
                             </div>
                         }
-                    </div> */}
+                    </div>
 
-                    {/* <div className='flex flex-row gap-3 '>
+                    <div className='flex flex-row gap-3 '>
                         <div className='w-full'>
                             <label for="productPrice" class="block text-sm font-medium text-gray-700">Price (₹)</label>
                             <input
@@ -126,10 +125,10 @@ const ProductInformation = () => {
                             </div>
                         }
                         </div>
-                    </div> */}
+                    </div>
 
 
-                    {/* <div>
+                    <div>
                         <label for="productGender" class="block text-sm font-medium text-gray-700">Gender</label>
                         <select
                             id="productGender"
@@ -144,9 +143,9 @@ const ProductInformation = () => {
                                 <p className='text-blue-500'>Gender is required</p>
                             </div>
                         }
-                    </div> */}
+                    </div>
 
-                    {/* <div>
+                    <div>
                         <label for="productColor" class="block text-sm font-medium text-gray-700">Color</label>
                         <select
                             id="productColor"
@@ -161,7 +160,7 @@ const ProductInformation = () => {
                                 <p className='text-blue-500'>name is required</p>
                             </div>
                         }
-                    </div> */}
+                    </div>
 
                     <div>
                         <label for="productSize" class="block text-sm font-medium text-gray-700">Size</label>
@@ -170,7 +169,7 @@ const ProductInformation = () => {
                                 size.map((item) => {
                                     return <div onClick={() => handleSize(item)}
                                     className={`w-[120px] text-center p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none hover:ring-blue-500 hover:border-blue-500  
-                                        ${ productInformation.size.includes(item) ? "bg-slate-200": ""}`}>{item.size}</div>
+                                        ${ sizes.includes(item) ? "bg-slate-200": ""}`}>{item}</div>
                                 })
                             }
                         </div>
