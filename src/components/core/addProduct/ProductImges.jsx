@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
-import { setProductCreatingSteps } from '../../../slice/Product';
+import { setProductCreatingSteps, setProductInformation } from '../../../slice/Product';
 import { set, useForm } from 'react-hook-form';
 import { RxCross2 } from "react-icons/rx";
 import { createProduct } from '../../../service/operation/product';
@@ -10,7 +10,8 @@ const ProductImges = () => {
   const [imageCount, setImageCount] = useState([]);
   const [mainImageUrl, setMainImageUrl] = useState();
   const [mainImageFile, setMainImageFile] = useState();
-  const {productInformation} = useSelector((state)=> state.product);
+  const {productInformation,productLoading} = useSelector((state)=> state.product);
+  const {user} = useSelector((state) => state.profile)
   const dispatch = useDispatch();
 
   const handleImage = () => {
@@ -45,11 +46,13 @@ const ProductImges = () => {
     const data = {
       ...productInformation,
       "mainImage" : mainImageFile,
-      "subImages" : imageCount
+      "subImages" : imageCount,
+      userId : user._id
     }
 
-    console.log(data,"this is shouse data");
-    await createProduct(data);
+    await createProduct(data,dispatch);
+    dispatch(setProductCreatingSteps(1))
+    dispatch(setProductInformation(null))
    
   }
 
@@ -67,6 +70,12 @@ const ProductImges = () => {
       setMainImageUrl(URL.createObjectURL(productInformation.mainImage))
     }
   }, [])
+
+  if(productLoading){
+    return <div className='h-screen w-screen flex items-center text-black justify-center'>
+     <div className='custom-loader'></div>
+    </div>
+  }  
 
  
   return (
@@ -148,10 +157,7 @@ const ProductImges = () => {
             <div onClick={() => dispatch(setProductCreatingSteps(2))} class="flex justify-end">
               <button class="bg-blue-500 h-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Back</button>
             </div>
-            <div class="flex justify-end my-8">
-                    <button onClick={() => dispatch(setProductCreatingSteps(3))}
-                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Continue without save</button>
-            </div>
+           
             <div class="flex justify-end">
               <button
                 type='submit'

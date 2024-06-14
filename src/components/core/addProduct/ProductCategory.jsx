@@ -28,23 +28,27 @@ const ProductCategory = () => {
       }
 
     const handleNext = () => {
-        console.log(categoryId,company)
         dispatch(setProductCreatingSteps(2));
+        
+        if(productInformation){
+          const data = {
+            ...productInformation
+           }
+           data.categoryId = categoryId
+           data.subCategoryId = company
+           
+           dispatch(setProductInformation(data));
+           return 
+        }
+
         const data = {
-            "categoryId" : categoryId,
-            "subCategoryId" : company
+            categoryId : categoryId,
+            subCategoryId : company
         }
         dispatch(setProductInformation(data));
     }
 
-    const isUpdated = () => {
-        if(categoryId !== productInformation.categoryId || company !== productInformation.subCategoryId){
-           return true 
-        }else{
-            return false
-        }
-    }
-    
+  
     
 
     useEffect(() => {
