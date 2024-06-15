@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserProducts } from '../service/operation/product';
+import SellerProductCard from '../components/core/sellerProducts/SellerProductCard';
 
 const SellerProducts = () => {
     const {user,userLoading} = useSelector((state) => state.profile);
@@ -22,14 +23,18 @@ const SellerProducts = () => {
     </div>
   }  
   return (
-    <div className='w-full h-full lg:min-h-screen min-h-[300px]'>
+    <div className='w-[70%] mx-auto p-3 border rounded-md my-3 h-full lg:min-h-screen min-h-[300px]'>
       {
         !products ? 
         <div className='w-full h-full lg:min-h-screen min-h-[300px]  flex items-center justify-center'>
             <p className='text-xl font-semibold'>Not Found</p>
         </div>
-        : <div>
-
+        : <div className='flex flex-col gap-3'>
+            {
+              products.map((item) => {
+                return <SellerProductCard key={item._id} product={item} fetchUserProducts={fetchUserProducts}/>
+              })
+            }
         </div> 
       }
     </div>

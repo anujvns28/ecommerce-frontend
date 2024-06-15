@@ -5,7 +5,13 @@ import { setProductLoading } from "../../slice/Product";
 import { setUserLoading } from "../../slice/user";
 
 
-const { GET_SINGLE_PRODUCT_API, CREATE_PRODUCT_API,GET_USER_PRODUCTS_API } = productEndPoints;
+const { 
+  GET_SINGLE_PRODUCT_API, 
+  CREATE_PRODUCT_API,
+  GET_USER_PRODUCTS_API ,
+  CHANGE_DISCOUNT_API,
+  UPDATE_PRODUCT_API
+} = productEndPoints;
 
 
 
@@ -57,4 +63,34 @@ export const getUserProducts = async (data,dispatch) => {
   }
   dispatch(setUserLoading(false))
   return result
+}
+
+export const changeDiscountPrice = async (data,dispatch) => {
+  dispatch(setProductLoading(true))
+  try {
+    const response = await apiConnector("POST", CHANGE_DISCOUNT_API, data)
+    console.log("change discount response", response)
+    toast.success("Updated successfully")
+  } catch (err) {
+    console.log("change discount response API ERROR....", err);
+  }
+  dispatch(setProductLoading(false))
+}
+
+export const editProduct = async (data,dispatch) => {
+  dispatch(setProductLoading(true))
+  try {
+    const response = await apiConnector("POST",
+       UPDATE_PRODUCT_API,
+        data,
+        {
+          "Content-Type": "multipart/form-data",
+        }
+      )
+    console.log("UPdate product response", response)
+    toast.success("Updated successfully")
+  } catch (err) {
+    console.log("UPdate product response API ERROR....", err);
+  }
+  dispatch(setProductLoading(false))
 }

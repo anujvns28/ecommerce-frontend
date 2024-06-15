@@ -21,7 +21,9 @@ export const subCtegoryEndPoints = {
 export const productEndPoints = {
     GET_SINGLE_PRODUCT_API : BASE_URL + "/product/getSingleProduct",
     CREATE_PRODUCT_API : BASE_URL + "/product/create-product",
-    GET_USER_PRODUCTS_API : BASE_URL + "/product/userProducts"
+    GET_USER_PRODUCTS_API : BASE_URL + "/product/userProducts",
+    CHANGE_DISCOUNT_API : BASE_URL + "/product/changeDiscount",
+    UPDATE_PRODUCT_API : BASE_URL + "/product/editProduct"
 }
 
 export const profileEndPoints = {

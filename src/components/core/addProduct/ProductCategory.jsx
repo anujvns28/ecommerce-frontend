@@ -11,6 +11,8 @@ const ProductCategory = () => {
 
     const {productInformation} = useSelector((state) => state.product);
 
+    console.log(productInformation,"thi is information")
+
     const dispatch = useDispatch();
 
     const fetchCategory = async () => {
@@ -20,7 +22,7 @@ const ProductCategory = () => {
           setCategories(category)
           
           if(productInformation){
-            setCategoryId(productInformation.categoryId);
+            setCategoryId(productInformation.category);
         }else{
             setCategoryId(category[0]._id)
         }
@@ -34,22 +36,19 @@ const ProductCategory = () => {
           const data = {
             ...productInformation
            }
-           data.categoryId = categoryId
-           data.subCategoryId = company
+           data.category = categoryId
+           data.subCategory = company
            
            dispatch(setProductInformation(data));
            return 
         }
 
         const data = {
-            categoryId : categoryId,
-            subCategoryId : company
+            category : categoryId,
+            subCategory : company
         }
         dispatch(setProductInformation(data));
     }
-
-  
-    
 
     useEffect(() => {
         fetchCategory();
@@ -81,7 +80,7 @@ const ProductCategory = () => {
                             ?  <option value="">loading..</option>
                             : categories.map(item => 
                              <option 
-                             selected={productInformation && productInformation.categoryId == item._id }
+                             selected={productInformation && productInformation.category == item._id }
                              value={item._id}>{item.categoryName}
                              </option>)   
                         }
@@ -99,7 +98,7 @@ const ProductCategory = () => {
                             ?  <div>Loading...</div>
                             : subCategories.map(item =>  
                             <option 
-                            selected={productInformation && productInformation.subCategoryId == item._id }
+                            selected={productInformation && productInformation.subCategory == item._id }
                             value={item._id}>{item.name}
                             </option>)   
                         }

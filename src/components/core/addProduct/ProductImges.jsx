@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProductCreatingSteps, setProductInformation } from '../../../slice/Product';
 import { set, useForm } from 'react-hook-form';
 import { RxCross2 } from "react-icons/rx";
-import { createProduct } from '../../../service/operation/product';
+import { createProduct, editProduct } from '../../../service/operation/product';
 
 const ProductImges = () => {
   const [imageCount, setImageCount] = useState([]);
   const [mainImageUrl, setMainImageUrl] = useState();
   const [mainImageFile, setMainImageFile] = useState();
-  const {productInformation,productLoading} = useSelector((state)=> state.product);
+  const {productInformation,productLoading,isEdit} = useSelector((state)=> state.product);
   const {user} = useSelector((state) => state.profile)
   const dispatch = useDispatch();
 
@@ -41,13 +41,21 @@ const ProductImges = () => {
     setImageCount(dum)
   }
 
+  
   const handleCreateProduct = async(e) => {
     e.preventDefault()
+
     const data = {
       ...productInformation,
-      "mainImage" : mainImageFile,
-      "subImages" : imageCount,
+      mainImage : mainImageFile,
+      productsImages: imageCount,
       userId : user._id
+    }
+
+    if(isEdit){
+      console.log(data,"this is edtind dataa")
+      await editProduct(data,dispatch)
+      return
     }
 
     await createProduct(data,dispatch);
@@ -66,10 +74,19 @@ const ProductImges = () => {
     setImageCount(dum)
 
     if(productInformation.mainImage){
-      setImageCount(productInformation.subImages)
-      setMainImageUrl(URL.createObjectURL(productInformation.mainImage))
+        if(!isEdit){
+          setImageCount(productInformation.subImages)
+          setMainImageUrl(URL.createObjectURL(productInformation.mainImage))
+        }else{
+          setMainImageUrl(productInformation.mainImage)
+          const data =  productInformation.productsImages.map((item,index) => {
+            return { id:index , url: item, file: null }
+        })
+        setImageCount(data)
+        }
     }
   }, [])
+
 
   if(productLoading){
     return <div className='h-screen w-screen flex items-center text-black justify-center'>

@@ -16,7 +16,19 @@ const ProductInformation = () => {
             return toast.error("Select atlest one size")
         }
 
-        dispatch(setProductInformation(data))
+        const dum = {
+            ...productInformation, 
+        }
+        dum.productName = data.productName
+        dum.productDes = data.productDes
+        dum.price = data.price
+        dum.discountPrice = data.discountPrice
+        dum.forWhom = data.forWhom
+        dum.color = data.color
+        dum.size = data.size
+        
+        console.log(dum,"thi is dum ")
+        dispatch(setProductInformation(dum))
         dispatch(setProductCreatingSteps(3));
     }
 
@@ -44,13 +56,11 @@ const ProductInformation = () => {
 
 
     useEffect(() => {
-        setValue("categoryId", productInformation.categoryId)
-        setValue("subCategoryId", productInformation.subCategoryId);
         setValue("productName", productInformation.productName && productInformation.productName)
-        setValue("productDescription", productInformation.productDescription && productInformation.productDescription)
+        setValue("productDes", productInformation.productDes && productInformation.productDes)
         setValue("price", productInformation.price && productInformation.price)
-        setValue("disPrice", productInformation.disPrice && productInformation.disPrice)
-        setValue("gender", productInformation.gender && productInformation.gender)
+        setValue("discountPrice", productInformation.discountPrice && productInformation.discountPrice)
+        setValue("forWhom", productInformation.forWhom && productInformation.forWhom)
         setValue("color", productInformation.color && productInformation.color)
         setValue("size", productInformation.size && productInformation.size)
 
@@ -82,17 +92,17 @@ const ProductInformation = () => {
                         </div>
 
                         <div>
-                            <label for="productDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                            <label for="productDes" class="block text-sm font-medium text-gray-700">Description</label>
                             <textarea
-                                id="productDescription"
+                                id="productDes"
                                 rows="4"
                                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Enter product description"
-                                {...register("productDescription", { required: true })}
+                                {...register("productDes", { required: true })}
                             >
                             </textarea>
                             {
-                                errors.productDescription && <div>
+                                errors.productDes && <div>
                                     <p className='text-blue-500'>product Description is required</p>
                                 </div>
                             }
@@ -120,10 +130,10 @@ const ProductInformation = () => {
                                     type="number"
                                     class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter product price"
-                                    {...register("disPrice", { required: true })}
+                                    {...register("discountPrice", { required: true })}
                                 />
                                 {
-                                    errors.disPrice && <div>
+                                    errors.discountPrice && <div>
                                         <p className='text-blue-500'>Discount price is required</p>
                                     </div>
                                 }
@@ -136,13 +146,13 @@ const ProductInformation = () => {
                             <select
                                 id="productGender"
                                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                {...register("gender", { required: true })}
+                                {...register("forWhom", { required: true })}
                             >
                                 <option value="">Select Category</option>
                                 {gender.map(item => <option value={item.gender}>{item.gender}</option>)}
                             </select>
                             {
-                                errors.gender && <div>
+                                errors.forWhom && <div>
                                     <p className='text-blue-500'>Gender is required</p>
                                 </div>
                             }

@@ -6,7 +6,8 @@ const initialState = {
   allProduct: localStorage.getItem("allProduct") ? JSON.parse(localStorage.getItem("allProduct")) : null,
   productLoading:false,
   productCreatingStep:1,
-  productInformation:null
+  productInformation:null,
+  isEdit:false,
 }
 
 export const productSlice = createSlice({
@@ -30,7 +31,10 @@ export const productSlice = createSlice({
     },
     setProductInformation(state,value){
       state.productInformation = value.payload;
-    }
+    },
+    setIsEdit(state,value){
+      state.isEdit = value.payload;
+    },
   },
 })
 
@@ -41,7 +45,8 @@ export const {
   setTotalProduct,
   setProductLoading,
   setProductCreatingSteps,
-  setProductInformation
+  setProductInformation,
+  setIsEdit
 } = productSlice.actions
 
 export default productSlice.reducer
