@@ -10,9 +10,6 @@ const ProductCategory = () => {
     const [company,setCompany] = useState();
 
     const {productInformation} = useSelector((state) => state.product);
-
-    console.log(productInformation,"thi is information")
-
     const dispatch = useDispatch();
 
     const fetchCategory = async () => {

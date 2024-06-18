@@ -10,7 +10,8 @@ const {
   CREATE_PRODUCT_API,
   GET_USER_PRODUCTS_API ,
   CHANGE_DISCOUNT_API,
-  UPDATE_PRODUCT_API
+  UPDATE_PRODUCT_API,
+  DELETE_PRODUCT_API
 } = productEndPoints;
 
 
@@ -29,7 +30,7 @@ export const getSignleProductInfo = async (data) => {
 }
 
 
-export const createProduct = async (data,dispatch) => {
+export const createProduct = async (data,dispatch,navigate) => {
   dispatch(setProductLoading(true))
   try {
     const response = await apiConnector(
@@ -42,6 +43,7 @@ export const createProduct = async (data,dispatch) => {
     );
     console.log("crating product resonse data", response);
     toast.success("Created successfully")
+    navigate("/products")
   }
   catch (error) {
     console.log("updating profile img api error....", error);
@@ -93,4 +95,16 @@ export const editProduct = async (data,dispatch) => {
     console.log("UPdate product response API ERROR....", err);
   }
   dispatch(setProductLoading(false))
+}
+
+export const deleteProduct = async (data,dispatch) => {
+  dispatch(setUserLoading(true))
+  try {
+    const response = await apiConnector("POST", DELETE_PRODUCT_API, data)
+    console.log("delete product response", response)
+    toast.success("Deleted  successfully")
+  } catch (err) {
+    console.log("delete product response API ERROR....", err);
+  }
+  dispatch(setUserLoading(false))
 }

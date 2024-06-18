@@ -23,7 +23,8 @@ export const productEndPoints = {
     CREATE_PRODUCT_API : BASE_URL + "/product/create-product",
     GET_USER_PRODUCTS_API : BASE_URL + "/product/userProducts",
     CHANGE_DISCOUNT_API : BASE_URL + "/product/changeDiscount",
-    UPDATE_PRODUCT_API : BASE_URL + "/product/editProduct"
+    UPDATE_PRODUCT_API : BASE_URL + "/product/editProduct",
+    DELETE_PRODUCT_API : BASE_URL + "/product/deleteProduct"
 }
 
 export const profileEndPoints = {

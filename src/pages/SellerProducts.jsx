@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserProducts } from '../service/operation/product';
 import SellerProductCard from '../components/core/sellerProducts/SellerProductCard';
+import { setProductCreatingSteps, setProductInformation } from '../slice/Product';
 
 const SellerProducts = () => {
     const {user,userLoading} = useSelector((state) => state.profile);
@@ -15,7 +16,11 @@ const SellerProducts = () => {
 
     useEffect(() => {
         fetchUserProducts();
+        dispatch(setProductCreatingSteps(1));
+        dispatch(setProductInformation(null));
     },[])
+
+   
     
   if(userLoading){
     return <div className='h-screen w-screen flex items-center text-black justify-center'>

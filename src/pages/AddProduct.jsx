@@ -6,13 +6,13 @@ import { FaCheck } from "react-icons/fa6";
 import { useSelector } from 'react-redux'
 
 const AddProduct = () => {
-  const { productCreatingStep } = useSelector((state) => state.product);
+  const { productCreatingStep ,isEdit} = useSelector((state) => state.product);
 
   return (
     <div class="bg-gray-100 w-full h-full min-h-[85vh]  py-4 ">
 
       <div className='flex sticky top-0 z-50 flex-col justify-center p-2 text-blue-600 border border-blue-600 h-[130px] mx-auto bg-white  rounded-lg shadow-lg w-[1000px] max-w-[90%] mb-3'>
-        <h2 class="text-2xl font-bold  text-center pb-2">Create Product</h2>
+        <h2 class="text-2xl font-bold  text-center pb-2">{isEdit ? "Edit Product " : "Create Product"} </h2>
         <div className='flex items-center justify-between pb-4'>
           <div className='flex flex-col gap-1 items-center justify-center'>
             <div className={`w-[30px] h-[30px] rounded-full border  text-center flex items-center  justify-center ${productCreatingStep > 1 ? "bg-yellow-400 text-2xl text-green-500" : "border-blue-600"}`}>

@@ -5,14 +5,18 @@ import { setProductCreatingSteps, setProductInformation } from '../../../slice/P
 import { set, useForm } from 'react-hook-form';
 import { RxCross2 } from "react-icons/rx";
 import { createProduct, editProduct } from '../../../service/operation/product';
+import { useNavigate } from 'react-router-dom';
 
 const ProductImges = () => {
   const [imageCount, setImageCount] = useState([]);
   const [mainImageUrl, setMainImageUrl] = useState();
   const [mainImageFile, setMainImageFile] = useState();
+  const [editedImage,setEditedImage] = useState([-1]);
   const {productInformation,productLoading,isEdit} = useSelector((state)=> state.product);
   const {user} = useSelector((state) => state.profile)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
 
   const handleImage = () => {
     const images = [...imageCount];
@@ -27,6 +31,11 @@ const ProductImges = () => {
   }
 
   const handleSubImages = (e, count) => {
+    if(isEdit){
+      const data = [...editedImage]
+      data.push(count)
+     setEditedImage(data);
+    }
     const image = e.target.files[0];
     const dum = [...imageCount];
     dum[count].url = URL.createObjectURL(image)
@@ -53,12 +62,18 @@ const ProductImges = () => {
     }
 
     if(isEdit){
-      console.log(data,"this is edtind dataa")
-      await editProduct(data,dispatch)
+      const editedData = {
+        ...productInformation,
+        mainImage : mainImageFile,
+        productsImages: imageCount,
+        editedImage : editedImage,
+      }
+      console.log(editedData,"this is edtind dataa")
+      await editProduct(editedData,dispatch)
       return
     }
 
-    await createProduct(data,dispatch);
+    await createProduct(data,dispatch,navigate);
     dispatch(setProductCreatingSteps(1))
     dispatch(setProductInformation(null))
    
@@ -70,6 +85,7 @@ const ProductImges = () => {
       { id: 1, url: null, file: null },
       { id: 2, url: null, file: null },
       { id: 3, url: null, file: null },
+      
     ]
     setImageCount(dum)
 
@@ -178,7 +194,7 @@ const ProductImges = () => {
             <div class="flex justify-end">
               <button
                 type='submit'
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Create Product</button>
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">{isEdit ? "Edit Product" : 'Create Product'}</button>
             </div>
           </div>
         </form>

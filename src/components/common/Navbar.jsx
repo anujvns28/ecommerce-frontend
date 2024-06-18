@@ -159,7 +159,7 @@ const Navbar = () => {
 
           <div className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
             <p className='text-2xl font-bold '><LiaUser /></p>
-            <p>Become Seller</p>
+            <p>{user ? user.accountType === "Buyer" ? "Become Seller" : "Seller Account" :"Become Seller"}</p>
           </div>
 
           <div className='flex gap-2  items-center relative'>
@@ -190,7 +190,7 @@ const Navbar = () => {
                   <div
                     className='relative w-full  -translate-x-[130px] z-50 hidden lg:block '>
                     {
-                      user.accountType !== "Buyer"
+                      user.accountType === "Buyer"
                         ? <div className='p-3 rounded-md bg-slate-400 absolute z-50 w-[150px]'>
                           {
                             buyerLinks.map((links) => {
