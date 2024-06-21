@@ -1,39 +1,84 @@
 import { createSlice } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 
 const initialState = {
-  filteredProduct : localStorage.getItem("allProduct") ? JSON.parse(localStorage.getItem("allProduct")) : null,
-  subCategory:null,
+  filteredProduct: localStorage.getItem("allProduct") ? JSON.parse(localStorage.getItem("allProduct")) : null,
+  subCategory: null,
   allProduct: localStorage.getItem("allProduct") ? JSON.parse(localStorage.getItem("allProduct")) : null,
-  productLoading:false,
-  productCreatingStep:1,
-  productInformation:null,
-  isEdit:false,
+  productLoading: false,
+  productCreatingStep: 1,
+  productInformation: null,
+  isEdit: false,
+  cart: localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [],
+  wishlist: localStorage.getItem("wishlist")
+    ? JSON.parse(localStorage.getItem("wishlist"))
+    : [],
+  recentlyView: localStorage.getItem("recentlyView")
+    ? JSON.parse(localStorage.getItem("recentlyView"))
+    : [],
 }
 
 export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    setFilteredProduct(state,value){
-        state.filteredProduct = value.payload
+    setFilteredProduct(state, value) {
+      state.filteredProduct = value.payload
     },
-    setSubCategory(state,value){
-        state.subCategory = value.payload
+    setSubCategory(state, value) {
+      state.subCategory = value.payload
     },
-    setTotalProduct(state,value){
+    setTotalProduct(state, value) {
       state.allProduct = value.payload
     },
-    setProductLoading(state,value){
+    setProductLoading(state, value) {
       state.productLoading = value.payload
     },
-    setProductCreatingSteps(state,value){
+    setProductCreatingSteps(state, value) {
       state.productCreatingStep = value.payload
     },
-    setProductInformation(state,value){
+    setProductInformation(state, value) {
       state.productInformation = value.payload;
     },
-    setIsEdit(state,value){
+    setIsEdit(state, value) {
       state.isEdit = value.payload;
+    },
+    // cart
+    addToCart(state, value) {
+      const product = value.payload;
+      const index = state.cart.findIndex((item) => item._id == product._id);
+      if (index === -1) {
+        state.cart.push(value.payload)
+        toast.success('Shouse Added')
+        localStorage.setItem("cart", JSON.stringify(state.cart))
+      } else {
+        toast.error("Shouse Alredy in cart")
+      }
+    },
+    removeCart(state, value) {
+      const index = state.cart.findIndex((item) => item._id === value.payload._id)
+      state.cart.splice(index, 1)
+      localStorage.setItem("cart", JSON.stringify(state.cart))
+    },
+    // wishlisht
+    addToWishlist(state, value) {
+      const product = value.payload;
+      const index = state.wishlist.findIndex((item) => item._id === product._id);
+      if (index === -1) {
+        state.wishlist.push(product);
+        toast.success("Shouse Added To Wishlist");
+        localStorage.setItem("wishlist", JSON.stringify(state.wishlist))
+      } else {
+        toast.error("Shouse Alredy in Wishlist");
+      }
+    },
+    removeToWishlist(state, value) {
+      const product = value.payload;
+      const index = state.wishlist.findIndex((item) => item._id === product._id);
+      state.wishlist.splice(index, 1);
+      localStorage.setItem("wishlist", JSON.stringify(state.wishlist))
     },
   },
 })
@@ -46,7 +91,11 @@ export const {
   setProductLoading,
   setProductCreatingSteps,
   setProductInformation,
-  setIsEdit
+  setIsEdit,
+  addToCart,
+  removeCart,
+  addToWishlist,
+  removeToWishlist,
 } = productSlice.actions
 
 export default productSlice.reducer

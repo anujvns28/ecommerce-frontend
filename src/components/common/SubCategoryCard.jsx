@@ -6,6 +6,7 @@ import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice
 
 const SubCategoryCard = ({item,categoryId}) => {
   const dispatch = useDispatch()
+  
  
   const handelSubCategoryProduct = async() => {
     const result = await getAllSubCategoriesProduct(item._id);

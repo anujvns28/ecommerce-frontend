@@ -16,6 +16,7 @@ import MobileAddress from './pages/MobileAddress';
 import UpdatePassword from './components/core/profile/UpdatePassword';
 import AddProduct from './pages/AddProduct';
 import SellerProducts from './pages/SellerProducts';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
 
       <Route path={"/create-product"} element={<AddProduct/>} />
       <Route path={"/products"} element={<SellerProducts/>} />
+      <Route path={"/cart"} element={<Cart/>}/>
       </Routes>
 
       <Footer/>

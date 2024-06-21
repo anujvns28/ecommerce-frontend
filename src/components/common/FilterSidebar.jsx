@@ -27,7 +27,6 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
         
     }
 
-    console.log(allProduct,"all product ")
 
     const handleGenderFilter = (gender) => {
         const genders = [...genderFilter];
@@ -94,13 +93,11 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
 
     // filter function
     const filter = () => {
-        console.log("calling.. filter")
         let filteredShouse
         dispatch(setFilteredProduct(allProduct))
       
         // price base filter
         if (priceFilter.length > 0) {
-            console.log("price...")
             let products = [];
             priceFilter.map((item) => {
                 const amounts = item.split("-");
@@ -118,7 +115,6 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
 
         // gender base filter
         if (genderFilter.length > 0 ) {
-            console.log("comming in gender filter")
             let products = [];
             const shouse = filteredShouse ? filteredShouse : allProduct;
             genderFilter.map((gender) => {
@@ -128,7 +124,6 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
                     }
                 });
             })
-            console.log(products,"this is gendef filter product")
             dispatch(setFilteredProduct(products))
             filteredShouse = [...products];
         }
@@ -181,7 +176,6 @@ const FilterSidebar = ({ toggled, setToggled,loadingFunction, }) => {
         checkFilters()
     }, [])
 
-    console.log(genderFilter,"this is gender filter")
     return (
         <div className='w-full h-full  '>
             <div className='max-w-[17%] sticky top-6 min-w-[250px] hidden lg:block  h-screen z-10  border p-4 overflow-y-scroll bg-scroll '>

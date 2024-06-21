@@ -5,6 +5,7 @@ import { AiOutlineDown } from "react-icons/ai"
 import { LiaUser } from "react-icons/lia"
 import { useDispatch, useSelector } from 'react-redux'
 import { RxHamburgerMenu } from "react-icons/rx";
+import { AiOutlineShoppingCart } from "react-icons/ai"
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { getAllCategories } from '../../service/operation/category'
 import { HiArrowLongRight } from "react-icons/hi2"
@@ -17,12 +18,15 @@ import { RxDashboard } from "react-icons/rx"
 import { IoSettingsOutline } from "react-icons/io5";
 import { logout } from '../../service/operation/auth'
 import useGetViewPort from '../../hook/useGetViewPort'
+import { getAllSubCategoriesProduct } from '../../service/operation/subCategory'
+import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product'
 
 
 
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
+  const {cart} = useSelector((state) => state.product)
   const [toggled, setToggled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showUserLinks, setShowUserLinks] = useState(false)
@@ -36,7 +40,7 @@ const Navbar = () => {
     {
       id: 1,
       name: viewport < 800 ? "Setting" : "My Profile",
-      icon: viewport < 800 ? <IoSettingsOutline/> : <AiOutlineUser />,
+      icon: viewport < 800 ? <IoSettingsOutline /> : <AiOutlineUser />,
       link: viewport < 800 ? "/my-profile" : "/my-profile/view-profile",
     },
     {
@@ -57,7 +61,7 @@ const Navbar = () => {
     {
       id: 1,
       name: viewport < 800 ? "Setting" : "My Profile",
-      icon: viewport < 800 ? <IoSettingsOutline/> : <AiOutlineUser />,
+      icon: viewport < 800 ? <IoSettingsOutline /> : <AiOutlineUser />,
       link: viewport < 800 ? "/my-profile" : "/my-profile/view-profile",
     },
     {
@@ -99,7 +103,18 @@ const Navbar = () => {
     }
   })
 
-  
+  const handelSubCategoryProduct = async (item) => {
+    const result = await getAllSubCategoriesProduct(item._id);
+    if (result) {
+      dispatch(setSubCategory(result.data));
+      dispatch(setFilteredProduct(result.data.product))
+      dispatch(setTotalProduct(result.data.product))
+      localStorage.setItem("allProduct", JSON.stringify(result.data.product))
+      setToggled(false)
+    }
+  }
+
+
   useEffect(() => {
     fetchAllCategory();
   }, [])
@@ -142,9 +157,12 @@ const Navbar = () => {
                             {
                               category.subCategories
                                 .map((subCategory) => {
-                                  return <div className='hover:bg-slate-400  py-4 px-4 rounded-md relative'>
-                                    {subCategory.name}
-                                  </div>
+                                  return <Link to={`/products/${category._id}/${subCategory._id}`}>
+                                    <div onClick={() => handelSubCategoryProduct(subCategory)}
+                                      className='hover:bg-slate-400  py-4 px-4 rounded-md relative'>
+                                      {subCategory.name}
+                                    </div>
+                                  </Link >
                                 })
                             }
                           </div>
@@ -159,7 +177,7 @@ const Navbar = () => {
 
           <div className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
             <p className='text-2xl font-bold '><LiaUser /></p>
-            <p>{user ? user.accountType === "Buyer" ? "Become Seller" : "Seller Account" :"Become Seller"}</p>
+            <p>{user ? user.accountType === "Buyer" ? "Become Seller" : "Seller Account" : "Become Seller"}</p>
           </div>
 
           <div className='flex gap-2  items-center relative'>
@@ -173,6 +191,21 @@ const Navbar = () => {
               !token && <p className='bg-blue-500 hover:bg-blue-700 font-bold text-white px-4 py-2 rounded-full'>
                 <Link to={"/signup"}> sign up
                 </Link>
+              </p>
+            }
+             {/* cart */}
+            {
+              token && <p className='text-2xl'>
+                {
+                  cart.length > 0 ? <div className='w-5 h-5 bg-red-500 rounded-full absolute -top-1 left-3'>
+                    <p className='text-white text-xs flex items-center justify-center'> {cart.length}</p>
+                  </div>
+                    : ""
+                }
+                {
+                  user.accountType === "Seller" ? ""
+                    : <Link to={"/cart"}> <AiOutlineShoppingCart /></Link>
+                }
               </p>
             }
 
@@ -205,7 +238,7 @@ const Navbar = () => {
                               </Link>
                             })
                           }
-                          <div onClick={() => logout(dispatch,navigate)}
+                          <div onClick={() => logout(dispatch, navigate)}
                             className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'>
                             <p>Logout</p>
                             <p><BiLogOut /></p>
@@ -226,7 +259,7 @@ const Navbar = () => {
                                   </Link>
                                 })
                               }
-                              <div onClick={() => logout(dispatch,navigate)}
+                              <div onClick={() => logout(dispatch, navigate)}
                                 className='flex flex-row gap-2 p-2 items-center justify-start hover:bg-slate-400 rounded-md'>
                                 <p>Logout</p>
                                 <p><BiLogOut /></p>
@@ -250,11 +283,26 @@ const Navbar = () => {
               </Link>
             </p>
           }
+          {/* mobile  cart  */}
+
           {
-            user && <div className='w-[30px] h-[30px]  rounded-full '>
-              <img className='rounded-full object-cover w-[30px] h-[30px]' src={user.image} />
-            </div>
+            token && <p className='text-2xl'>
+              {
+                cart.length > 0 ? <div className='w-5 h-5 bg-red-500 rounded-full absolute z-20 -translate-y-3 translate-x-2'>
+                  <p className='text-white text-xs flex items-center justify-center'> {cart.length}</p>
+                </div>
+                  : ""
+              }
+              {
+                user.accountType === "Seller" ? ""
+                  : <Link to={"/cart"}>
+                    <p className='relative'> <AiOutlineShoppingCart /></p>
+                  </Link>
+              }
+            </p>
           }
+
+          
 
           <p onClick={() => setToggled(!toggled)}
             className='text-2xl cursor-pointer'><RxHamburgerMenu /></p>
@@ -290,7 +338,10 @@ const Navbar = () => {
                     {
                       category.subCategories
                         .map((subCategory) => {
-                          return <MenuItem > {subCategory.name}</MenuItem>
+                          return <Link to={`/products/${category._id}/${subCategory._id}`}>
+                            <MenuItem onClick={() => handelSubCategoryProduct(subCategory)}
+                            > {subCategory.name}</MenuItem>
+                          </Link>
                         })
                     }
                   </SubMenu>
@@ -354,21 +405,21 @@ const Navbar = () => {
             {
               token && <div>
                 <p className='text-sm px-3 pt-2 text-black font-bold'>My Stuf</p>
-            <MenuItem>Cart</MenuItem>
-            <MenuItem>Wishlist</MenuItem>
+                <MenuItem>Cart</MenuItem>
+                <MenuItem>Wishlist</MenuItem>
               </div>
             }
 
             {
               token && <MenuItem onClick={() => {
-                logout(dispatch,navigate)
+                logout(dispatch, navigate)
                 setToggled(false)
               }}
-              className='text-center  '>
+                className='text-center  '>
                 <div className='rounded-md bg-black text-white py-2 '>
-                Logout
+                  Logout
                 </div>
-                </MenuItem>
+              </MenuItem>
             }
           </Menu>
         </Sidebar>

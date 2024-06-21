@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { IoFilterSharp } from "react-icons/io5"
 import { AiOutlineDown } from "react-icons/ai"
 import { CategoryInfo } from '../service/operation/category'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ProductCard from '../components/common/ProductCard'
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +13,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import SubCategoryCard from '../components/common/SubCategoryCard'
+import { setFilteredProduct } from '../slice/Product'
 
 const SubCategories = () => {
   const { categoryId, subCategoryId } = useParams();
@@ -21,6 +22,10 @@ const SubCategories = () => {
   const { subCategory, filteredProduct, productLoading } = useSelector((state) => state.product)
   const [filterLoading, setFilterLoading] = useState(false);
   const [viewport, setViewport] = useState(window.innerWidth);
+  const [showFilter,setShowFilter] = useState(true);
+  const [open,setOpen] = useState(false);
+  const [short,setShort] = useState();
+  const dispatch = useDispatch();
   
     
     const handleResize = () => {
@@ -45,8 +50,20 @@ const SubCategories = () => {
   }
 
   useEffect(() => {
+  if(short == "lToH"){
+    const product = [... filteredProduct]
+    const filterdProduct = product.sort((a,b) => a.price-b.price);
+    dispatch(setFilteredProduct(filterdProduct))
+  }else if(short == "hToL"){
+    const product = [... filteredProduct]
+    const filterdProduct = product.sort((a,b) => b.price - a.price);
+    dispatch(setFilteredProduct(filterdProduct))
+  }
+  },[short])
+
+  useEffect(() => {
     fetchCategoryInfo();
-  }, [])
+  }, [categoryId])
 
   if (!category) {
     return <div className='h-screen w-screen flex items-center justify-center'>
@@ -63,14 +80,25 @@ const SubCategories = () => {
         </div>
 
         <div className='lg:flex hidden flex-row gap-4 text-lg'>
-          <div className='flex items-center flex-row gap-1 cursor-pointer'>
-            <p>Hide Filters</p>
+          <div onClick={()=>setShowFilter(!showFilter)}
+          className='flex items-center flex-row gap-1 cursor-pointer'>
+            <p>{showFilter ? "Hide" : "Show"} Filters</p>
             <p><IoFilterSharp /></p>
           </div>
 
-          <div className='flex items-center flex-row gap-1 cursor-pointer'>
-            <p>Short By</p>
-            <p><AiOutlineDown /></p>
+          <div onClick={() => setOpen(!open)}
+            className='flex items-center flex-row gap-1 cursor-pointer relative '>
+            <p>Sort By</p>
+            {
+              open &&
+              <div className='bg-gray-800 p-2 rounded-md flex flex-col items-start absolute w-40 shadow-lg transform translate-y-16 -translate-x-20'>
+              <p onClick={() => setShort("hToL")}
+              className={` px-3 py-2 rounded-md hover:bg-gray-700 cursor-pointer text-sm ${short === "hToL" ?  "text-blue-500" : "text-white" } `}>Price: High-Low</p>
+              <p onClick={() => setShort("lToH")}
+              className={` px-3 py-2 rounded-md hover:bg-gray-700 cursor-pointer text-sm ${short === "lToH" ?  "text-blue-500" : "text-white" } `} >Price: Low-High</p>
+            </div>
+            }
+            <p className={`${open ? "rotate-180" : ""}`}><AiOutlineDown /></p>
           </div>
         </div>
 
@@ -83,13 +111,15 @@ const SubCategories = () => {
       </div>
 
       <div className='flex  w-full min-h-[500px] '>
-        <div className=' lg:w-[22%]'>
-          <FilterSidebar
-            toggled={toggled}
-            setToggled={setToggled}
-            loadingFunction={loadingFunction}
-          />
-        </div>
+     {
+      showFilter &&    <div className=' lg:w-[22%]'>
+      <FilterSidebar
+        toggled={toggled}
+        setToggled={setToggled}
+        loadingFunction={loadingFunction}
+      />
+    </div>
+     }
 
         {/* product div */}
         <div className='w-full  h-full p-2 min-h-[700px] bg-slate-100 rounded-md flex   border'>

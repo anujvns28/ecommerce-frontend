@@ -79,8 +79,8 @@ const SellerProductCard = ({product,fetchUserProducts}) => {
           text2:"Are you sure want to Delete?",
           btn1:"Cancle",
           bet2:"Delete",
-          handler1:setDeleteModal(null),
-          handler2:handleDelete()
+          handler1:() => setDeleteModal(null),
+          handler2:() => handleDelete()
         })}
         className='cursor-pointer'><MdDelete/></p>
       </div>
