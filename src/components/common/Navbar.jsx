@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logo from "../../assets/logo.svg"
 import { AiOutlineDown } from "react-icons/ai"
 import { LiaUser } from "react-icons/lia"
@@ -20,6 +20,7 @@ import { logout } from '../../service/operation/auth'
 import useGetViewPort from '../../hook/useGetViewPort'
 import { getAllSubCategoriesProduct } from '../../service/operation/subCategory'
 import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product'
+import { setIsSellerAccount } from '../../slice/user'
 
 
 
@@ -53,7 +54,7 @@ const Navbar = () => {
       id: 3,
       name: "Wishlist",
       icon: <AiOutlineHeart />,
-      link: "/my-profile/wishlist",
+      link: "/wishlist",
     },
   ]
 
@@ -112,6 +113,11 @@ const Navbar = () => {
       localStorage.setItem("allProduct", JSON.stringify(result.data.product))
       setToggled(false)
     }
+  }
+
+  const handleSellerAccount = () => {
+     navigate("/signup")
+     dispatch(setIsSellerAccount(true));
   }
 
 
@@ -175,7 +181,8 @@ const Navbar = () => {
           </div>
 
 
-          <div className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
+          <div onClick={handleSellerAccount}
+           className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
             <p className='text-2xl font-bold '><LiaUser /></p>
             <p>{user ? user.accountType === "Buyer" ? "Become Seller" : "Seller Account" : "Become Seller"}</p>
           </div>
@@ -355,7 +362,7 @@ const Navbar = () => {
               token ?
                 <div>
                   {
-                    user.accountType !== "Buyer" ?
+                    user.accountType === "Buyer" ?
                       buyerLinks.map((links) => {
                         return <MenuItem>
                           <Link to={links.link}>
@@ -405,8 +412,8 @@ const Navbar = () => {
             {
               token && <div>
                 <p className='text-sm px-3 pt-2 text-black font-bold'>My Stuf</p>
-                <MenuItem>Cart</MenuItem>
-                <MenuItem>Wishlist</MenuItem>
+                <Link to={'/cart'} onClick={() => setToggled(false)}> <MenuItem>Cart</MenuItem></Link>
+                <Link to={'/wishlist'} onClick={() => setToggled(false)}> <MenuItem>Wishlist</MenuItem></Link>
               </div>
             }
 

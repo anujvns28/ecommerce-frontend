@@ -15,7 +15,7 @@ import { size } from '../data/filterData';
 import { IoIosArrowDown } from "react-icons/io";
 import ReactStars from "react-rating-stars-component";
 import Modal from '../components/common/Modal';
-import { addToCart, addToWishlist } from '../slice/Product';
+import { addCartPrice, addToCart, addToWishlist } from '../slice/Product';
 
 const SingleProduct = () => {
 
@@ -26,6 +26,8 @@ const SingleProduct = () => {
   const [viewport, setViewport] = useState(window.innerWidth);
   const [category, setCategory] = useState();
   const [modalData,setModalData] = useState();
+  const [selectSize,setSelectSize] = useState();
+  const [isSizeSelected,setIsSizeSelected] = useState(false);
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,9 +50,7 @@ const SingleProduct = () => {
     }
   }
 
-  const goToLogin = () => {
-   
-  }
+
 
   // cart functin
   const handleCart = () => {
@@ -65,7 +65,20 @@ const SingleProduct = () => {
       })
       return
     }
-    dispatch(addToCart(productInfo))
+     if(selectSize){
+      const data = {...productInfo};
+      data.size = selectSize;
+      dispatch(addToCart(data))
+      dispatch(addCartPrice(productInfo.price));
+      setIsSizeSelected(false)
+     }else{
+      setIsSizeSelected(true)
+     }
+  }
+
+  const handlleSize = (data) => {
+    setSelectSize(data)
+    setIsSizeSelected(false)
   }
 
    // wishlist functin
@@ -154,17 +167,21 @@ const SingleProduct = () => {
             <p className='font-semibold pb-2'>Color : {productInfo ? productInfo.color : "Loading..."}</p>
 
             {/* size */}
-            <div className='mb-4 hidden lg:flex flex-col'>
+            <div className={`mb-4 hidden lg:flex flex-col `}>
               <label class="block  font-medium text-gray-700">Select Size</label>
-              <div className='flex flex-row flex-wrap gap-3 mt-1 '>
+              <div className={`flex flex-row flex-wrap gap-3 rounded-md p-1 mt-1 ${isSizeSelected && "border border-red-600"}`}>
                 {
                   size.map((item, index) => {
-                    return <div key={index}
-                      className={`w-[120px] text-center p-3 border border-gray-300 rounded-md shadow-sm   
+                    return <div key={index} onClick={() => handlleSize(item)}
+                      className={`w-[118px] text-center p-3 border border-gray-300 rounded-md shadow-sm   
                       ${productInfo.size.includes(item) ? "cursor-pointer focus:outline-none hover:ring-blue-500 hover:border-blue-500" : "bg-slate-50 opacity-30"}`}>{item}</div>
                   })
                 }
               </div>
+              {
+                isSizeSelected && <p className='text-red-600'>Please select a size.</p>
+              }
+
             </div>
 
             <div className='lg:flex hidden flex-col gap-3'>
@@ -252,15 +269,18 @@ const SingleProduct = () => {
           {/* size */}
           <div className='mb-4 '>
             <label class="block  font-medium text-gray-700">Select Size</label>
-            <div className='flex flex-row flex-wrap gap-2 mt-1 '>
+            <div className={`flex flex-row flex-wrap gap-2 mt-1  ${isSizeSelected && "border border-red-600"}`}>
               {
                 size.map((item, index) => {
-                  return <div key={index}
+                  return <div key={index} onClick={() => handlleSize(item)}
                     className={`w-[100px] text-center px-1 py-2 border border-gray-300 rounded-md shadow-sm   
                       ${productInfo.size.includes(item) ? "cursor-pointer focus:outline-none hover:ring-blue-500 hover:border-blue-500" : "bg-slate-50 opacity-30"}`}>{item}</div>
                 })
               }
             </div>
+            {
+                isSizeSelected && <p className='text-red-600'>Please select a size.</p>
+              }
           </div>
           {/* buttons */}
           <div className='flex flex-col gap-3'>

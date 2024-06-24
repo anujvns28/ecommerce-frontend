@@ -7,8 +7,10 @@ import CartCard from '../components/core/cart/CartCard'
 
 
 const Cart = () => {
-    const { cart } = useSelector((state) => state.product)
-    const { user } = useSelector((state) => state.profile)
+    const { cart ,cartTotalPrice} = useSelector((state) => state.product);
+    const { user } = useSelector((state) => state.profile);
+
+
     const nevagite = useNavigate()
 
     return (
@@ -21,7 +23,7 @@ const Cart = () => {
 
                             <div className='lg:w-[60%]  w-[85%] mx-auto'>
                                 <h1 className='text-xl font-semibold text-start py-1 lg:py-6'>Cart Items</h1>
-                                <div className='flex lg:flex-row flex-col gap-2'>
+                                <div className='flex lg:flex-col flex-col gap-2'>
                                     {
                                         cart.map((item) => {
                                             return <CartCard item={item} />
@@ -35,7 +37,7 @@ const Cart = () => {
                                 <div className='bg-slate-400 rounded-md p-3'>
                                     <div className='flex items-center justify-between border-b border-solid p-3 text-2xl'>
                                         <h2>SUBTOTAL</h2>
-                                        <h2>8888</h2>
+                                        <h2>₹{cartTotalPrice}</h2>
                                     </div>
                                     <p className='p-3'>The subtotal reflects the total price of your order, including duties and taxes, before any applicable discounts. It does not include delivery costs and international transaction fees.</p>
 
@@ -44,9 +46,10 @@ const Cart = () => {
                                     className='px-6 text-center cursor-pointer py-4 text-xl mt-5 bg-black rounded-full text-white hover:bg-opacity-80'
                                 >Checkout</div>
                             </div>
+
                             {/* mobile checkout */}
                             <div className='w-[95%] mx-auto flex lg:hidden p-2 bg-white sticky bottom-2 justify-between border rounded-md items-center'>
-                                <div className='px-8 text-xl '>₹8888</div>
+                                <div className='px-8 text-xl '>₹{cartTotalPrice}</div>
                                 <div
                                     className='px-10 text-center cursor-pointer py-2  bg-black rounded-md text-white hover:bg-opacity-80'
                                 >Checkout

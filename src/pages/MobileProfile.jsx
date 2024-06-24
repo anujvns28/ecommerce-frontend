@@ -23,7 +23,7 @@ const MobileProfile = () => {
                 </button>
 
 
-                <button 
+                <button onClick={() => navigate("/wishlist")}
                     className='py-2 px-4 w-[45%] font-semibold border border-black rounded-md text-black items-start '>
                         Wishlist
                 </button>

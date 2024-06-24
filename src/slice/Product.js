@@ -12,6 +12,9 @@ const initialState = {
   cart: localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [],
+  cartTotalPrice:localStorage.getItem("totalCartPrice") 
+    ? JSON.parse(localStorage.getItem("totalCartPrice"))
+    : 0,
   wishlist: localStorage.getItem("wishlist")
     ? JSON.parse(localStorage.getItem("wishlist"))
     : [],
@@ -57,10 +60,23 @@ export const productSlice = createSlice({
         toast.error("Shouse Alredy in cart")
       }
     },
+    updateCartProduct(state,value){
+      const product = value.payload;
+      const index = state.cart.findIndex((item) => item._id == product._id);
+      state.cart[index] = value.payload
+      localStorage.setItem("cart", JSON.stringify(state.cart))
+    },
     removeCart(state, value) {
       const index = state.cart.findIndex((item) => item._id === value.payload._id)
       state.cart.splice(index, 1)
       localStorage.setItem("cart", JSON.stringify(state.cart))
+    },
+    addCartPrice(state,value){
+      state.cartTotalPrice = state.cartTotalPrice + value.payload;
+      localStorage.setItem("totalCartPrice",state.cartTotalPrice)
+    },
+    subCartPrice(state,value){
+      state.cartTotalPrice = state.cartTotalPrice - value.payload
     },
     // wishlisht
     addToWishlist(state, value) {
@@ -94,8 +110,12 @@ export const {
   setIsEdit,
   addToCart,
   removeCart,
+  addCartPrice,
+  updateCartProduct,
+  subCartPrice,
   addToWishlist,
   removeToWishlist,
+
 } = productSlice.actions
 
 export default productSlice.reducer

@@ -1,8 +1,8 @@
 // src/components/Signup.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setAuthLoading, setSignupData, setUser } from '../slice/auth';
 import toast from 'react-hot-toast';
 import { getOtp } from '../service/operation/auth';
@@ -10,11 +10,14 @@ import { getOtp } from '../service/operation/auth';
 const Signup = () => {
     const navigate = useNavigate();
     const {user,authLoading} = useSelector((state) => state.auth);
+    const {isSellerAccount} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
+    const [serarchParams,setSearchParams] = useSearchParams();
 
     const {
         register
         ,handleSubmit,
+        setValue,
         formState:{errors}
     } = useForm();
 
@@ -27,6 +30,25 @@ const Signup = () => {
         toast.error("Password not matched")
       }
      }
+
+     useEffect(() => {
+      const account = serarchParams.get("account")
+      console.log(account)
+      if(account == "seller"){
+        setValue("accountType","Seller")
+      }else{
+        setValue("accountType","Buyer")
+      }
+      
+     },[])
+
+     useEffect(() => {
+      if(isSellerAccount){
+        const params = new URLSearchParams(serarchParams);
+        params.set('account', "seller");
+        setSearchParams(params);
+      }
+     },[])
 
     if(authLoading){
       return <div className='h-screen w-screen flex items-center text-black justify-center'>

@@ -14,7 +14,7 @@ const VeryfyEmail = () => {
   const data = {
     ...signupData,
     otp:otp,
-    accountType:"User"
+   
   }
   console.log(data)
   await signUp(data,navigate,dispatch)
