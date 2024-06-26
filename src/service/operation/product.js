@@ -11,7 +11,9 @@ const {
   GET_USER_PRODUCTS_API ,
   CHANGE_DISCOUNT_API,
   UPDATE_PRODUCT_API,
-  DELETE_PRODUCT_API
+  DELETE_PRODUCT_API,
+  CREATE_RATING_API,
+  GET_RATING_AND_REVIEW_API
 } = productEndPoints;
 
 
@@ -107,4 +109,38 @@ export const deleteProduct = async (data,dispatch) => {
     console.log("delete product response API ERROR....", err);
   }
   dispatch(setUserLoading(false))
+}
+
+
+// create a rating for course
+export const createRating = async (data) => {
+  try {
+    const response = await apiConnector("POST", CREATE_RATING_API, data)
+    console.log("CREATE RATING API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Create Rating")
+    }
+    toast.success("Rating Created")
+  } catch (error) {
+  
+    console.log("CREATE RATING API ERROR............", error)
+    toast.error(error.response.data.message)
+  }
+}
+
+
+export const getRatingAndReview = async (data) => {
+  let result;
+  try {
+    const response = await apiConnector("POST", GET_RATING_AND_REVIEW_API, {productId:data})
+    console.log("get RATING API RESPONSE............", response)
+    result = response.data
+    if (!response?.data?.success) {
+      throw new Error("Could Not get Rating")
+    }
+  } catch (error) {
+  
+    console.log("get RATING API ERROR............", error)
+  }
+  return result
 }

@@ -5,7 +5,7 @@ const Modal = ({modalData}) => {
    
   return (
     <div className="fixed inset-0 z-[1000] grid place-items-center overflow-auto bg-gradient-to-br  bg-opacity-60 backdrop-blur-sm">
-    <div className="w-[350px] p-8 flex flex-col gap-6 rounded-2xl shadow-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border border-transparent">
+    <div className="lg:w-[350px] w-[300px] p-8 flex flex-col gap-6 rounded-2xl shadow-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border border-transparent">
       <div>
         <p className="text-3xl font-bold">{modalData.text1}</p>
         <p className="text-base pt-4 opacity-90">{modalData.text2}</p>

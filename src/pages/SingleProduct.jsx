@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getSignleProductInfo } from '../service/operation/product';
+import { getRatingAndReview, getSignleProductInfo } from '../service/operation/product';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../components/common/ProductCard';
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
@@ -13,9 +13,10 @@ import { CategoryInfo } from '../service/operation/category';
 import SubCategoryCard from '../components/common/SubCategoryCard';
 import { size } from '../data/filterData';
 import { IoIosArrowDown } from "react-icons/io";
-import ReactStars from "react-rating-stars-component";
+import ReactStars from 'react-stars'
 import Modal from '../components/common/Modal';
 import { addCartPrice, addToCart, addToWishlist } from '../slice/Product';
+import RatingAndReviewModal from '../components/common/RatingAndReviewModal';
 
 const SingleProduct = () => {
 
@@ -25,9 +26,11 @@ const SingleProduct = () => {
   const { allProduct } = useSelector((state) => state.product);
   const [viewport, setViewport] = useState(window.innerWidth);
   const [category, setCategory] = useState();
-  const [modalData,setModalData] = useState();
-  const [selectSize,setSelectSize] = useState();
-  const [isSizeSelected,setIsSizeSelected] = useState(false);
+  const [modalData, setModalData] = useState();
+  const [selectSize, setSelectSize] = useState();
+  const [reviewModal, setReviewModal] = useState();
+  const [isSizeSelected, setIsSizeSelected] = useState(false);
+  const [ratingAndReviews, setRatingAndREviews] = useState();
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,6 +44,7 @@ const SingleProduct = () => {
 
   const fetchproductInfo = async () => {
     const result = await getSignleProductInfo(productId);
+    const rating = await getRatingAndReview(productId);
     if (result) {
       setProductInfo(result.data)
       const category = await CategoryInfo(result.data.category);
@@ -48,32 +52,35 @@ const SingleProduct = () => {
         setCategory(category.data)
       }
     }
+    if (rating) {
+      setRatingAndREviews(rating.data)
+    }
   }
 
 
 
   // cart functin
   const handleCart = () => {
-    if(!user){
+    if (!user) {
       setModalData({
-        text1:"Login!!",
-        text2:"You are not logged in!",
-        btn1:"Cancle",
-        btn2:"Login",
-        handler1:() => setModalData(null),
-        handler2:() =>  navigate("/login")
+        text1: "Login!!",
+        text2: "You are not logged in!",
+        btn1: "Cancle",
+        btn2: "Login",
+        handler1: () => setModalData(null),
+        handler2: () => navigate("/login")
       })
       return
     }
-     if(selectSize){
-      const data = {...productInfo};
+    if (selectSize) {
+      const data = { ...productInfo };
       data.size = selectSize;
       dispatch(addToCart(data))
       dispatch(addCartPrice(productInfo.price));
       setIsSizeSelected(false)
-     }else{
+    } else {
       setIsSizeSelected(true)
-     }
+    }
   }
 
   const handlleSize = (data) => {
@@ -81,38 +88,54 @@ const SingleProduct = () => {
     setIsSizeSelected(false)
   }
 
-   // wishlist functin
-   const handleWhisList = () => {
-    if(!user){
+  // wishlist functin
+  const handleWhisList = () => {
+    if (!user) {
       setModalData({
-        text1:"Login!!",
-        text2:"You are not logged in!",
-        btn1:"Cancle",
-        btn2:"Login",
-        handler1:() => setModalData(null),
-        handler2:() =>  navigate("/login")
+        text1: "Login!!",
+        text2: "You are not logged in!",
+        btn1: "Cancle",
+        btn2: "Login",
+        handler1: () => setModalData(null),
+        handler2: () => navigate("/login")
       })
       return
     }
     dispatch(addToWishlist(productInfo))
   }
 
-   // buy now functin
-   const handleBuyNow = () => {
-    if(!user){
+  // buy now functin
+  const handleBuyNow = () => {
+    if (!user) {
       setModalData({
-        text1:"Login!!",
-        text2:"You are not logged in!",
-        btn1:"Cancle",
-        btn2:"Login",
-        handler1:() => setModalData(null),
-        handler2:() =>  navigate("/login")
+        text1: "Login!!",
+        text2: "You are not logged in!",
+        btn1: "Cancle",
+        btn2: "Login",
+        handler1: () => setModalData(null),
+        handler2: () => navigate("/login")
       })
       return
     }
   }
 
-  console.log("product Info", productInfo)
+  // rating and review function
+  const handleRatingAndReview = () => {
+    if (!user) {
+      setModalData({
+        text1: "Login!!",
+        text2: "You are not logged in!",
+        btn1: "Cancle",
+        btn2: "Login",
+        handler1: () => setModalData(null),
+        handler2: () => navigate("/login")
+      })
+      return
+    }
+    setReviewModal(true)
+  }
+
+  console.log("product Info", ratingAndReviews)
 
   useEffect(() => {
     fetchproductInfo();
@@ -224,27 +247,69 @@ const SingleProduct = () => {
               {/* ratting and revied */}
               <details className=' border-b-2  py-5'>
                 <summary className='flex cursor-pointer items-center justify-between text-xl font-semibold   '>
-                  <p className=' '> Reviews (38)</p>
+                  <p className=' '> Reviews ({productInfo.ratingAndReviews.length})</p>
                   <div className='flex items-center justify-center gap-2'>
-                    <ReactStars
-                      count={5}
-                      size={24}
-                      isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
-                      value={4.3}
-                      edit={false}
-                    />
+                    {
+                      ratingAndReviews &&
+                      <ReactStars
+                        count={5}
+                        value={ratingAndReviews.averageRating}
+                        edit={false}
+                        size={24}
+                        color2={'#ffd700'} />
+                    }
                     <p><IoIosArrowDown /></p>
                   </div>
                 </summary>
                 <div className='font-semibold leading-relaxed'>
-                  <p className='pt-4'>All purchases are subject to delivery fees.</p>
-                  <p><span className='text-3xl font-bold '>.</span> Standard delivery 4–9 business days</p>
-                  <p>Orders are processed and delivered Monday–Friday (excluding public holidays)</p>
-                  <p>Premimum Members enjoy free returns.</p>
+                  <div className='flex flex-row gap-4 items-center pt-8'>
+                    <ReactStars
+                      count={5}
+                      value={ratingAndReviews ? ratingAndReviews.averageRating : 0}
+                      edit={false}
+                      size={24}
+                      color2={'#ffd700'} />
+
+                    <p className=''> {ratingAndReviews ? ratingAndReviews.averageRating : 0} Stars</p>
+                  </div>
+
+                  <p onClick={handleRatingAndReview}
+                    className='font-semibold underline pt-1 pb-6 cursor-pointer'>Write a Review
+                  </p>
+
+                  {
+                   ratingAndReviews &&
+                   <div>
+                     {
+                      ratingAndReviews.ratingAndReviews.length === 0 ?
+                      <div className='flex items-center justify-center'>
+                        <p className='py-4'>Not Reviewed Yet</p>
+                      </div>
+                      : <div className='flex flex-col gap-5'>
+                        {
+                          ratingAndReviews.ratingAndReviews.map((item,index) => {
+                            return <div className={`${index !== ratingAndReviews.ratingAndReviews.length-1 && "border-b pb-4" }`}>
+                              <div className='flex flex-row items-center gap-3'>
+                              <img src={item.user.image} className='w-[20px] h-[20px] rounded-full object-fill' />
+                              <div>{item.user.firstName}{" "}{item.user.lastName}</div>
+                              <div>
+                                <ReactStars
+                                  count={5}
+                                  value={item.rating}
+                                  edit={false}
+                                  size={20}
+                                  color2={'#ffd700'} />
+                              </div>
+                              </div>
+                              <p>{item.review}</p>
+                            </div>
+                          })
+                        }
+                      </div>
+                     }
+                   </div>
+                  }
+
                 </div>
               </details>
 
@@ -279,8 +344,8 @@ const SingleProduct = () => {
               }
             </div>
             {
-                isSizeSelected && <p className='text-red-600'>Please select a size.</p>
-              }
+              isSizeSelected && <p className='text-red-600'>Please select a size.</p>
+            }
           </div>
           {/* buttons */}
           <div className='flex flex-col gap-3'>
@@ -322,28 +387,67 @@ const SingleProduct = () => {
             {/* ratting and revied */}
             <details className=' border-b-2  py-5'>
               <summary className='flex cursor-pointer items-center justify-between text-xl font-semibold   '>
-                <p className=' '> Reviews (38)</p>
+                <p className=' '> Reviews ({productInfo.ratingAndReviews.length})</p>
                 <div className='flex items-center justify-center gap-2'>
                   <ReactStars
                     count={5}
-                    size={24}
-                    isHalf={true}
-                    emptyIcon={<i className="far fa-star"></i>}
-                    halfIcon={<i className="fa fa-star-half-alt"></i>}
-                    fullIcon={<i className="fa fa-star"></i>}
-                    activeColor="#ffd700"
-                    value={4.3}
+                    value={ratingAndReviews ? ratingAndReviews.averageRating : 0}
                     edit={false}
-                  />
+                    size={24}
+                    color2={'#ffd700'} />
                   <p><IoIosArrowDown /></p>
                 </div>
               </summary>
               <div className='font-semibold leading-relaxed'>
-                <p className='pt-4'>All purchases are subject to delivery fees.</p>
-                <p><span className='text-3xl font-bold '>.</span> Standard delivery 4–9 business days</p>
-                <p>Orders are processed and delivered Monday–Friday (excluding public holidays)</p>
-                <p>Premimum Members enjoy free returns.</p>
-              </div>
+                  <div className='flex flex-row gap-4 items-center pt-8'>
+                    <ReactStars
+                      count={5}
+                      value={ratingAndReviews ? ratingAndReviews.averageRating : 0}
+                      edit={false}
+                      size={24}
+                      color2={'#ffd700'} />
+
+                    <p className=''> {ratingAndReviews ? ratingAndReviews.averageRating : 0} Stars</p>
+                  </div>
+
+                  <p onClick={handleRatingAndReview}
+                    className='font-semibold underline pt-1 pb-6 cursor-pointer'>Write a Review
+                  </p>
+
+                  {
+                   ratingAndReviews &&
+                   <div>
+                     {
+                      ratingAndReviews.ratingAndReviews.length === 0 ?
+                      <div className='flex items-center justify-center'>
+                        <p className='py-4'>Not Reviewed Yet</p>
+                      </div>
+                      : <div className='flex flex-col gap-5'>
+                        {
+                          ratingAndReviews.ratingAndReviews.map((item,index) => {
+                            return <div className={`${index !== ratingAndReviews.ratingAndReviews.length-1 && "border-b pb-4" }`}>
+                              <div className='flex flex-row items-center gap-3'>
+                              <img src={item.user.image} className='w-[20px] h-[20px] rounded-full object-fill' />
+                              <div>{item.user.firstName}{" "}{item.user.lastName}</div>
+                              <div>
+                                <ReactStars
+                                  count={5}
+                                  value={item.rating}
+                                  edit={false}
+                                  size={20}
+                                  color2={'#ffd700'} />
+                              </div>
+                              </div>
+                              <p>{item.review}</p>
+                            </div>
+                          })
+                        }
+                      </div>
+                     }
+                   </div>
+                  }
+
+                </div>
             </details>
 
             <details className=' border-b-2 py-5'>
@@ -425,7 +529,12 @@ const SingleProduct = () => {
           }
         </div>
       </div>
-      { modalData && <Modal modalData={modalData}/>}
+      {modalData && <Modal modalData={modalData} />}
+      {reviewModal && <RatingAndReviewModal 
+      setReviewModal={setReviewModal} 
+      productId={productInfo._id} 
+      fetchproductInfo={fetchproductInfo}
+      />}
     </div>
   )
 }

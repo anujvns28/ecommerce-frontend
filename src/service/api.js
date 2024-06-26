@@ -24,7 +24,9 @@ export const productEndPoints = {
     GET_USER_PRODUCTS_API : BASE_URL + "/product/userProducts",
     CHANGE_DISCOUNT_API : BASE_URL + "/product/changeDiscount",
     UPDATE_PRODUCT_API : BASE_URL + "/product/editProduct",
-    DELETE_PRODUCT_API : BASE_URL + "/product/deleteProduct"
+    DELETE_PRODUCT_API : BASE_URL + "/product/deleteProduct",
+    CREATE_RATING_API: BASE_URL + "/product/createRating",
+    GET_RATING_AND_REVIEW_API : BASE_URL + "/product/getRatingAndReview"
 }
 
 export const profileEndPoints = {

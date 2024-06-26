@@ -22,7 +22,6 @@ const Signup = () => {
     } = useForm();
 
     const handleSignup = async(data) => {
-        console.log(data)
       if(data.password === data.confirmPassword){
         dispatch(setSignupData(data))
         await getOtp(data.email,navigate,dispatch);
@@ -47,6 +46,7 @@ const Signup = () => {
         const params = new URLSearchParams(serarchParams);
         params.set('account', "seller");
         setSearchParams(params);
+        setValue("accountType","Seller")
       }
      },[])
 
