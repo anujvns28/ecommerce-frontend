@@ -17,6 +17,8 @@ import ReactStars from 'react-stars'
 import Modal from '../components/common/Modal';
 import { addCartPrice, addToCart, addToWishlist } from '../slice/Product';
 import RatingAndReviewModal from '../components/common/RatingAndReviewModal';
+import { buyShouse } from '../service/operation/payment';
+import AddressModal from '../components/common/AddressModal';
 
 const SingleProduct = () => {
 
@@ -30,6 +32,7 @@ const SingleProduct = () => {
   const [selectSize, setSelectSize] = useState();
   const [reviewModal, setReviewModal] = useState();
   const [isSizeSelected, setIsSizeSelected] = useState(false);
+  const [showAddressModal,setShowAddressModal] = useState(false);
   const [ratingAndReviews, setRatingAndREviews] = useState();
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
@@ -105,7 +108,7 @@ const SingleProduct = () => {
   }
 
   // buy now functin
-  const handleBuyNow = () => {
+  const handleBuyNow = async() => {
     if (!user) {
       setModalData({
         text1: "Login!!",
@@ -117,6 +120,13 @@ const SingleProduct = () => {
       })
       return
     }
+    if (selectSize) {
+      // await buyShouse([productId],user)
+      setShowAddressModal(true)
+    } else {
+      setIsSizeSelected(true)
+    }
+
   }
 
   // rating and review function
@@ -135,7 +145,10 @@ const SingleProduct = () => {
     setReviewModal(true)
   }
 
-  console.log("product Info", ratingAndReviews)
+ 
+
+
+
 
   useEffect(() => {
     fetchproductInfo();
@@ -196,7 +209,7 @@ const SingleProduct = () => {
                 {
                   size.map((item, index) => {
                     return <div key={index} onClick={() => handlleSize(item)}
-                      className={`w-[118px] text-center p-3 border border-gray-300 rounded-md shadow-sm   
+                      className={`w-[118px] text-center p-3 border border-gray-300 rounded-md shadow-sm ${selectSize === item && "bg-slate-200"}
                       ${productInfo.size.includes(item) ? "cursor-pointer focus:outline-none hover:ring-blue-500 hover:border-blue-500" : "bg-slate-50 opacity-30"}`}>{item}</div>
                   })
                 }
@@ -338,7 +351,7 @@ const SingleProduct = () => {
               {
                 size.map((item, index) => {
                   return <div key={index} onClick={() => handlleSize(item)}
-                    className={`w-[100px] text-center px-1 py-2 border border-gray-300 rounded-md shadow-sm   
+                    className={`w-[100px] text-center px-1 py-2 border border-gray-300 rounded-md shadow-sm   ${selectSize === item && "bg-slate-200"}
                       ${productInfo.size.includes(item) ? "cursor-pointer focus:outline-none hover:ring-blue-500 hover:border-blue-500" : "bg-slate-50 opacity-30"}`}>{item}</div>
                 })
               }
@@ -535,6 +548,9 @@ const SingleProduct = () => {
       productId={productInfo._id} 
       fetchproductInfo={fetchproductInfo}
       />}
+      {
+        showAddressModal && <AddressModal setShowAddressModal={setShowAddressModal}/>
+      }
     </div>
   )
 }

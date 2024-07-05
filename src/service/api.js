@@ -37,3 +37,9 @@ export const profileEndPoints = {
     EDIT_ADDRESS : BASE_URL + "/auth/editAddress",
     UPDATE_PASSWORD : BASE_URL + "/auth/updatePassword"
 }
+
+export const paymentEndpoints = {
+    SHOUSE_PAYMENT_API: BASE_URL + "/payment/capturePayment",
+    SHOUSE_VERIFY_API: BASE_URL + "/payment/verifyPayment",
+    SEND_PAYMENT_SUCCESS_EMAIL_API: BASE_URL + "/payment/sendPaymentSuccessEmail",
+  }
