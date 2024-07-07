@@ -133,7 +133,7 @@ export const getRatingAndReview = async (data) => {
   let result;
   try {
     const response = await apiConnector("POST", GET_RATING_AND_REVIEW_API, {productId:data})
-    console.log("get RATING API RESPONSE............", response)
+    // console.log("get RATING API RESPONSE............", response)
     result = response.data
     if (!response?.data?.success) {
       throw new Error("Could Not get Rating")

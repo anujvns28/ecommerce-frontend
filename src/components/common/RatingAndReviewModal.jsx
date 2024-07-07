@@ -20,7 +20,9 @@ const RatingAndReviewModal = ({setReviewModal,productId,fetchproductInfo}) => {
      }
     await createRating(reviewData)
     setReviewModal(false)
-    fetchproductInfo();
+    if(fetchproductInfo){
+      fetchproductInfo();
+    }
     }
 
     const ratingChanged = (newRating) => {

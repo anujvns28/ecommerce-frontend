@@ -18,6 +18,7 @@ import AddProduct from './pages/AddProduct';
 import SellerProducts from './pages/SellerProducts';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
+import MyOrders from './pages/MyOrders';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
       <Route path={"/products"} element={<SellerProducts/>} />
       <Route path={"/cart"} element={<Cart/>}/>
       <Route path={"/wishlist"} element={<Wishlist/>} />
+      <Route path={"/orders"} element={<MyOrders/>} />
       </Routes>
 
       <Footer/>

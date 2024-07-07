@@ -146,10 +146,6 @@ const SingleProduct = () => {
   }
 
  
-
-
-
-
   useEffect(() => {
     fetchproductInfo();
   }, [productId])
@@ -549,7 +545,7 @@ const SingleProduct = () => {
       fetchproductInfo={fetchproductInfo}
       />}
       {
-        showAddressModal && <AddressModal setShowAddressModal={setShowAddressModal}/>
+        showAddressModal && <AddressModal productId={productId} setShowAddressModal={setShowAddressModal}/>
       }
     </div>
   )
