@@ -13,7 +13,8 @@ const {
   UPDATE_PRODUCT_API,
   DELETE_PRODUCT_API,
   CREATE_RATING_API,
-  GET_RATING_AND_REVIEW_API
+  GET_RATING_AND_REVIEW_API,
+   SEARCH_PRODUCT_API
 } = productEndPoints;
 
 
@@ -143,4 +144,16 @@ export const getRatingAndReview = async (data) => {
     console.log("get RATING API ERROR............", error)
   }
   return result
+}
+
+export const serachProduct = async (data) => {
+  let result
+  try {
+    const response = await apiConnector("POST", SEARCH_PRODUCT_API, {userInput:data});
+    // console.log("search product response", response)
+    result = response.data
+  } catch (err) {
+    console.log("search product response API ERROR....", err);
+  }
+ return result
 }

@@ -21,6 +21,8 @@ import useGetViewPort from '../../hook/useGetViewPort'
 import { getAllSubCategoriesProduct } from '../../service/operation/subCategory'
 import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product'
 import { setIsSellerAccount } from '../../slice/user'
+import{serachProduct} from "../../service/operation/product";
+import Intelligence from './Intelligence'
 
 
 
@@ -31,11 +33,15 @@ const Navbar = () => {
   const [toggled, setToggled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showUserLinks, setShowUserLinks] = useState(false)
+  const [userInput,setUserInput] = useState([]);
+  const [searchOutputs,setSearchOutputs] = useState([]);
+
   const viewport = useGetViewPort();
 
   const dispatch = useDispatch();
 
   const userLinksRef = useRef();
+
 
   const buyerLinks = [
     {
@@ -102,6 +108,7 @@ const Navbar = () => {
     } else {
       setShowUserLinks(false)
     }
+
   })
 
   const handelSubCategoryProduct = async (item) => {
@@ -119,6 +126,27 @@ const Navbar = () => {
      navigate("/signup")
      dispatch(setIsSellerAccount(true));
   }
+
+  // handleSerch input
+  useEffect(() => {
+    const fetchProduct = async() => {
+      const data = await serachProduct(userInput);
+      if(data){
+        // console.log(data.shouses,"this is serach data")
+        setSearchOutputs(data.shouses)
+      }
+    }
+
+    console.log(userInput.length,"this is user input")
+
+    if(userInput.length === 0){
+      setSearchOutputs([])
+    }
+    
+    if(userInput.length >=1 ){
+      fetchProduct();
+    }
+  },[userInput])
 
 
   useEffect(() => {
@@ -138,10 +166,14 @@ const Navbar = () => {
 
         <div className='hidden xl:flex flex-row gap-10 w-10/12 justify-between px-4'>
 
-          <input
+          <input 
+          onChange={(e) => setUserInput(e.target.value)}
             placeholder="Search For Product, Brands By Name"
             class="w-full max-w-[40rem] h-10 py-1 relative rounded-md bg-slate-300 flex items-center justify-center border border-solid px-5 outline-none sm:w-3/4 md:w-3/5 lg:w-1/2"
           />
+
+          <Intelligence  searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs}/>
+      
 
           <div className='flex relative group cursor-pointer items-center flex-row gap-1  justify-center '>
             <p>Categories</p>
@@ -318,11 +350,16 @@ const Navbar = () => {
       </div>
       {/* mobile device serach box */}
       <div className='w-11/12 mx-auto xl:hidden block'>
-        <input
+        <input  
+         onChange={(e) => setUserInput(e.target.value)}
           placeholder="Search For Product ,Brands By Name"
           className='w-full h-10 py-1 relative  rounded-md bg-slate-300 flex  items-center justify-centere border border-solid px-5 outline-none'
         />
+
+       <Intelligence  searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs}/>
       </div>
+     
+
       {/* mobilnav */}
       <div className='absolute' style={{ display: 'flex', height: '100%', }}>
         <Sidebar backgroundColor='white'
