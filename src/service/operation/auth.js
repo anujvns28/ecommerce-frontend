@@ -10,6 +10,8 @@ const {
     GET_OTP,
     SIGN_UP_API,
     LOGIN_API,
+    SEND_RESET_PASSWORD_MAIL,
+    RESET_PASSWORD_API
 } = authEndPoints
 
 export const getOtp = async (email,navigate,dispatch) => {
@@ -82,4 +84,36 @@ export const logout = (dispatch,navigate) =>{
   
   toast.success("Loghout Successfully")
   navigate("/")
+}
+
+
+/// send reset password mail
+export const sendResetPassordMail = async (email,dispatch) => {
+  dispatch(setAuthLoading(true))
+  try {
+      const response = await apiConnector("POST", SEND_RESET_PASSWORD_MAIL,{email:email});
+      console.log("otp response", response);
+      toast.success("Mail send successfully")
+  }
+  catch (error) {
+      console.log("reset password  API ERROR....", error);
+      toast.error(error.response.data.message)
+  }
+  dispatch(setAuthLoading(false))
+}
+
+/// send reset password mail
+export const resetPassword = async (data,dispatch,navigate) => {
+  dispatch(setAuthLoading(true))
+  try {
+      const response = await apiConnector("POST", RESET_PASSWORD_API,data);
+      console.log("reset Password response", response);
+      toast.success("Reset successfully")
+      navigate("/login")
+  }
+  catch (error) {
+      console.log("reset password  API ERROR....", error);
+      toast.error(error.response.data.message)
+  }
+  dispatch(setAuthLoading(false))
 }

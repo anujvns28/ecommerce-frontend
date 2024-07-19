@@ -66,7 +66,7 @@ const Dashboard = () => {
                         <div className='flex flex-col gap-3 '>
                             {
                                 product.map((product) => {
-                                    return <div className='w-full  p-4 border border-black flex justify-between gap-5 '>
+                                    return <div key={product._id} className='w-full  p-4 border border-black flex justify-between gap-5 '>
 
                                         <div className='w-full p-2  flex flex-row gap-5 '>
                                             <Link to={`/shouse/${product._id}`}>

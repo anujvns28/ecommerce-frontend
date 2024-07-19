@@ -25,8 +25,8 @@ const Cart = () => {
                                 <h1 className='text-xl font-semibold text-start py-1 lg:py-6'>Cart Items</h1>
                                 <div className='flex lg:flex-col flex-col gap-2'>
                                     {
-                                        cart.map((item) => {
-                                            return <CartCard item={item} />
+                                        cart.map((item,index) => {
+                                            return <CartCard item={item} key={index}/>
                                         })
                                     }
                                 </div>

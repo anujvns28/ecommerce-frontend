@@ -20,8 +20,8 @@ import { logout } from '../../service/operation/auth'
 import useGetViewPort from '../../hook/useGetViewPort'
 import { getAllSubCategoriesProduct } from '../../service/operation/subCategory'
 import { setFilteredProduct, setSubCategory, setTotalProduct } from '../../slice/Product'
-import { setIsSellerAccount } from '../../slice/user'
-import{serachProduct} from "../../service/operation/product";
+import { setIsSellerAccount, setUser } from '../../slice/user'
+import { serachProduct } from "../../service/operation/product";
 import Intelligence from './Intelligence'
 
 
@@ -29,19 +29,20 @@ import Intelligence from './Intelligence'
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
-  const {cart} = useSelector((state) => state.product)
+  const { cart } = useSelector((state) => state.product)
   const [toggled, setToggled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showUserLinks, setShowUserLinks] = useState(false)
-  const [userInput,setUserInput] = useState([]);
-  const [searchOutputs,setSearchOutputs] = useState([]);
+  const [userInput, setUserInput] = useState();
+  const [searchOutputs, setSearchOutputs] = useState();
+ 
 
   const viewport = useGetViewPort();
 
   const dispatch = useDispatch();
 
   const userLinksRef = useRef();
-
+  const searchBoxRef = useRef();
 
   const buyerLinks = [
     {
@@ -108,8 +109,21 @@ const Navbar = () => {
     } else {
       setShowUserLinks(false)
     }
-
   })
+
+  window.addEventListener("click", (e) => {
+      if (!searchBoxRef?.current) {
+        return;
+      }
+
+      if (!searchBoxRef.current.contains(e.target)) {
+        setSearchOutputs(null);
+        setUserInput(null)
+      }
+  }
+  )
+
+
 
   const handelSubCategoryProduct = async (item) => {
     const result = await getAllSubCategoriesProduct(item._id);
@@ -123,30 +137,28 @@ const Navbar = () => {
   }
 
   const handleSellerAccount = () => {
-     navigate("/signup")
-     dispatch(setIsSellerAccount(true));
+    navigate("/signup")
+    dispatch(setIsSellerAccount(true));
   }
 
   // handleSerch input
   useEffect(() => {
-    const fetchProduct = async() => {
+    const fetchProduct = async () => {
       const data = await serachProduct(userInput);
-      if(data){
+      if (data) {
         // console.log(data.shouses,"this is serach data")
         setSearchOutputs(data.shouses)
       }
     }
 
-    console.log(userInput.length,"this is user input")
-
-    if(userInput.length === 0){
+    if (userInput) {
       setSearchOutputs([])
     }
-    
-    if(userInput.length >=1 ){
+
+    if (userInput) {
       fetchProduct();
     }
-  },[userInput])
+  }, [userInput])
 
 
   useEffect(() => {
@@ -166,14 +178,18 @@ const Navbar = () => {
 
         <div className='hidden xl:flex flex-row gap-10 w-10/12 justify-between px-4'>
 
-          <input 
-          onChange={(e) => setUserInput(e.target.value)}
+          <input
+            onChange={(e) => setUserInput(e.target.value)}
+            value={userInput}
             placeholder="Search For Product, Brands By Name"
             class="w-full max-w-[40rem] h-10 py-1 relative rounded-md bg-slate-300 flex items-center justify-center border border-solid px-5 outline-none sm:w-3/4 md:w-3/5 lg:w-1/2"
           />
 
-          <Intelligence  searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs}/>
-      
+          <div ref={searchBoxRef}
+            className='absolute'>
+            <Intelligence searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs} />
+          </div>
+
 
           <div className='flex relative group cursor-pointer items-center flex-row gap-1  justify-center '>
             <p>Categories</p>
@@ -184,8 +200,9 @@ const Navbar = () => {
                 !categories ? <div className=' flex items-center justify-center'>Loading...</div>
                   : <div >
                     {
-                      categories.map((category) => {
-                        return <div className='hover:bg-slate-400 anuj py-4 px-4 rounded-md relative'>
+                      categories.map((category,index) => {
+                        return <div key={index}
+                        className='hover:bg-slate-400 anuj py-4 px-4 rounded-md relative'>
                           <div
                             className='flex justify-between '>
                             {category.categoryName}
@@ -214,7 +231,7 @@ const Navbar = () => {
 
 
           <div onClick={handleSellerAccount}
-           className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
+            className='flex relative  cursor-pointer hover:text-neutral-500 items-center flex-row   justify-center '>
             <p className='text-2xl font-bold '><LiaUser /></p>
             <p>{user ? user.accountType === "Buyer" ? "Become Seller" : "Seller Account" : "Become Seller"}</p>
           </div>
@@ -232,7 +249,7 @@ const Navbar = () => {
                 </Link>
               </p>
             }
-             {/* cart */}
+            {/* cart */}
             {
               token && <p className='text-2xl'>
                 {
@@ -341,7 +358,7 @@ const Navbar = () => {
             </p>
           }
 
-          
+
 
           <p onClick={() => setToggled(!toggled)}
             className='text-2xl cursor-pointer'><RxHamburgerMenu /></p>
@@ -350,15 +367,15 @@ const Navbar = () => {
       </div>
       {/* mobile device serach box */}
       <div className='w-11/12 mx-auto xl:hidden block'>
-        <input  
-         onChange={(e) => setUserInput(e.target.value)}
+        <input
+          onChange={(e) => setUserInput(e.target.value)}
           placeholder="Search For Product ,Brands By Name"
           className='w-full h-10 py-1 relative  rounded-md bg-slate-300 flex  items-center justify-centere border border-solid px-5 outline-none'
         />
 
-       <Intelligence  searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs}/>
+        <Intelligence searchOutputs={searchOutputs} setSearchOutputs={setSearchOutputs} />
       </div>
-     
+
 
       {/* mobilnav */}
       <div className='absolute' style={{ display: 'flex', height: '100%', }}>

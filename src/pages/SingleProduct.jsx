@@ -434,7 +434,7 @@ const SingleProduct = () => {
                       : <div className='flex flex-col gap-5'>
                         {
                           ratingAndReviews.ratingAndReviews.map((item,index) => {
-                            return <div className={`${index !== ratingAndReviews.ratingAndReviews.length-1 && "border-b pb-4" }`}>
+                            return <div key={index} className={`${index !== ratingAndReviews.ratingAndReviews.length-1 && "border-b pb-4" }`}>
                               <div className='flex flex-row items-center gap-3'>
                               <img src={item.user.image} className='w-[20px] h-[20px] rounded-full object-fill' />
                               <div>{item.user.firstName}{" "}{item.user.lastName}</div>

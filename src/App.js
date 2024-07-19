@@ -20,6 +20,8 @@ import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import MyOrders from './pages/MyOrders';
 import Dashboard from './pages/Dashboard';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
       <Route path={"/wishlist"} element={<Wishlist/>} />
       <Route path={"/orders"} element={<MyOrders/>} />
       <Route path={"/dashboard"} element={<Dashboard/>} />
+      <Route path={"/forgot-password"} element={<ForgotPassword/>} />
+      <Route path={"/update-password/:token"} element={<ResetPassword/>} />
       </Routes>
 
       <Footer/>

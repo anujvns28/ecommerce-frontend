@@ -5,7 +5,9 @@ export const authEndPoints = {
     SIGN_UP_API : BASE_URL + "/auth/signup",
     LOGIN_API : BASE_URL + "/auth/login",
     FORGOTPASSWORDTOKEN_API : BASE_URL + "/auth/forgotPasswordToken",
-    FORGOTPASSWORD_API : BASE_URL + "/auth/forgotPassword"
+    FORGOTPASSWORD_API : BASE_URL + "/auth/forgotPassword",
+    SEND_RESET_PASSWORD_MAIL : BASE_URL + "/auth/resetPasswordMial",
+    RESET_PASSWORD_API : BASE_URL + "/auth/resetPassword"
 }
 
 export const categoryEndPoints = {

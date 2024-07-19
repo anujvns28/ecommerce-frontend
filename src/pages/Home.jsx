@@ -65,8 +65,8 @@ const Home = () => {
                 >
                   {
                     category.subCategories
-                    .map((item) => (
-                      <div>
+                    .map((item,index) => (
+                      <div key={index}>
                         <SwiperSlide>
                           <SubCategoryCard item={item} categoryId={category._id} />
                         </SwiperSlide>

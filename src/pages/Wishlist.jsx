@@ -27,7 +27,7 @@ const Wishlist = () => {
                     : <div className='w-full h-full flex flex-col gap-4'>
                         {
                             wishlist.map((product) => {
-                                return <div className='w-full p-2 border border-black flex gap-1 lg:gap-5 '>
+                                return <div key={product._id} className='w-full p-2 border border-black flex gap-1 lg:gap-5 '>
 
                                     <div className='w-full p-2  flex flex-row lg:gap-5 gap-2 '>
                                         <Link to={`/shouse/${product._id}`}>
