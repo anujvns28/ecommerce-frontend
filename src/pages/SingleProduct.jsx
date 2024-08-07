@@ -147,6 +147,7 @@ const SingleProduct = () => {
 
  
   useEffect(() => {
+    setProductInfo(null)
     fetchproductInfo();
   }, [productId])
 
@@ -237,7 +238,7 @@ const SingleProduct = () => {
             {/* information */}
             <div className='pt-4 px-2 hidden lg:flex flex-col '>
               <p className='text-black font-semibold leading-relaxed'>
-                A flash from the past, the Nike Court Royale 2 features the same design that has rocked the streets since the late '70s. Leather on the upper looks crisp and is easy to wear, while the large retro Swoosh design adds throwback appeal. To top it off, the modernised herringbone sole puts a twist on the classic look.
+                {productInfo ? productInfo.productDes : "Loading..."}
               </p>
 
               <details className=' border-y-2 mt-5 py-5'>
@@ -377,7 +378,7 @@ const SingleProduct = () => {
           {/* information */}
           <div className='pt-4 px-2  '>
             <p className='text-black font-semibold leading-relaxed'>
-              A flash from the past, the Nike Court Royale 2 features the same design that has rocked the streets since the late '70s. Leather on the upper looks crisp and is easy to wear, while the large retro Swoosh design adds throwback appeal. To top it off, the modernised herringbone sole puts a twist on the classic look.
+              {productInfo ? productInfo.productDes : "Loading..."}
             </p>
 
             <details className=' border-y-2 mt-5 py-5'>
@@ -490,7 +491,7 @@ const SingleProduct = () => {
                       modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                       navigation
                       spaceBetween={10}
-                      slidesPerView={viewport < 500 ? 2.2 : 4.05}
+                      slidesPerView={viewport < 500 ? 1.8 : 4.05}
                     >
                       <div className='items-center  '>
                         {
