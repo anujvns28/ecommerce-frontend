@@ -134,7 +134,9 @@ const SubCategories = () => {
                 : <div className='flex flex-row flex-wrap w-full lg:gap-5 gap-2 p-1'>
                   {
                     filteredProduct.map((product) => {
-                      return <div key={product._id} className='lg:w-[32%] lg:min-w-[250px]   w-[190px]'>
+                          return <div key={product._id} className='
+                         product-card
+                          '>
                         <ProductCard product={product} />
                       </div>
                     })

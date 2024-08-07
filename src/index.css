@@ -64,3 +64,29 @@ code {
 .transition-div.closed {
   max-height: 0;
 }
+
+
+.product-card {
+  width: 48%;
+  padding: 8px; 
+ /* Equivalent to Tailwind's p-2 */
+}
+
+@media (min-width: 640px) {
+  .product-card {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-card {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card {
+    width: 32%;
+    min-width: 250px;
+  }
+}
