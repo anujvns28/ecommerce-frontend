@@ -3,22 +3,47 @@
   "name": "shousedekho.com",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "./sneakers.png",
+      "sizes": "72x72",
+      "type": "image/png"
     },
     {
-      "src": "favicon.ico",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "./sneakers.png",
+      "sizes": "96x96",
+      "type": "image/png"
     },
     {
-      "src": "favicon.ico",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "./sneakers.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "./sneakers.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./sneakers.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "./sneakers.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./sneakers.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "./sneakers.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
-  "start_url": "./favicon.ico",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
