@@ -19,6 +19,7 @@ import { addCartPrice, addToCart, addToWishlist } from '../slice/Product';
 import RatingAndReviewModal from '../components/common/RatingAndReviewModal';
 import { buyShouse } from '../service/operation/payment';
 import AddressModal from '../components/common/AddressModal';
+import { setRecentlyView } from '../slice/user';
 
 const SingleProduct = () => {
 
@@ -50,6 +51,7 @@ const SingleProduct = () => {
     const rating = await getRatingAndReview(productId);
     if (result) {
       setProductInfo(result.data)
+      dispatch(setRecentlyView(result.data));
       const category = await CategoryInfo(result.data.category);
       if (category) {
         setCategory(category.data)
@@ -149,6 +151,7 @@ const SingleProduct = () => {
   useEffect(() => {
     setProductInfo(null)
     fetchproductInfo();
+    
   }, [productId])
 
   if (!productInfo) {

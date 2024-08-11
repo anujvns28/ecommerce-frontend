@@ -10,6 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import SubCategoryCard from '../components/common/SubCategoryCard';
+import RecentView from '../components/common/RecentView';
 
 
 const Home = () => {
@@ -79,8 +80,12 @@ const Home = () => {
           }
             </div>
           }
+
+<RecentView/>
         </div>
+        
       </div>
+      
 
     </div>
   )
