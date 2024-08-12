@@ -131,7 +131,7 @@ const SubCategories = () => {
               : filterLoading ? <div className='w-full min-h-[700px]  items-center justify-center flex'>
                 <div className='custom-loader '></div>
               </div>
-                : <div className='flex flex-row flex-wrap w-full lg:gap-5 gap-2 p-1'>
+                : <div  className='flex flex-row flex-wrap w-full lg:gap-5 gap-1 p-1'>
                   {
                     filteredProduct.map((product) => {
                           return <div key={product._id} className='

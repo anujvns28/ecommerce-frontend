@@ -36,10 +36,10 @@ const ProductCard = ({product}) => {
      />
     </div>
     <div className="flex flex-col lg:gap-2  px-1 py-3  mt-1 rounded-md  mx-auto">
-          <p className="lg:text-[1.1rem] text-sm  font-semibold text-richblack-5 ">{product.productName.split(" ",3).join(" ")}</p>
+          <p className="lg:text-[1.1rem] text-sm  font-semibold text-richblack-5 ">{product.productName.length > 10 ? product.productName.slice(0,14) : product.productName}</p>
           <p className="lg:text-[1.1rem] text-xs font-semibold text-slate-500">{product.forWhom}'s shouse</p>
           <p className="lg:text-[1.1rem] text-xs font-semibold text-slate-500 ">color : {product.color}</p>
-          <p className="lg:text-[1.1rem] font-semibold text-richblack-5 ">MRP : ₹ {product.price}</p>
+          <p className="lg:text-[1.1rem] text-sm font-semibold text-richblack-5 ">MRP : ₹ {product.price}</p>
     </div>
      
     </div>
