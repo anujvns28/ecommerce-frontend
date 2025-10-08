@@ -165,6 +165,8 @@ const Navbar = () => {
     fetchAllCategory();
   }, [])
 
+  console.log("category  ...", categories);
+
   return (
     <div className='border-b border-blue-100 nav-shadow py-1'>
       <div className='flex flex-row items-center justify-between h-20 w-11/12 mx-auto ' >
