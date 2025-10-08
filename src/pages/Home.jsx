@@ -27,13 +27,15 @@ const Home = () => {
     
     window.addEventListener("resize",handleResize);
 
-  const fetchAllCategory = async () => {
-    const result = await getAllCategories();
-    if (result) {
+  const fetchAllCategory = () => {
+    getAllCategories()
+    .then((result) => {
+      console.log(result,"this is category result home page")
       const categorys = result.data.filter((item) => item.subCategories
       .length > 0);
       setCategories(categorys);
-    }
+    })
+
     console.log("calaling..")
   }
 

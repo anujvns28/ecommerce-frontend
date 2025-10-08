@@ -54,10 +54,10 @@ export const productSlice = createSlice({
       const index = state.cart.findIndex((item) => item._id == product._id);
       if (index === -1) {
         state.cart.push(value.payload)
-        toast.success('Shouse Added')
+        toast.success('Product Added')
         localStorage.setItem("cart", JSON.stringify(state.cart))
       } else {
-        toast.error("Shouse Alredy in cart")
+        toast.error("Product Alredy in cart")
       }
     },
     updateCartProduct(state,value){
@@ -84,10 +84,10 @@ export const productSlice = createSlice({
       const index = state.wishlist.findIndex((item) => item._id === product._id);
       if (index === -1) {
         state.wishlist.push(product);
-        toast.success("Shouse Added To Wishlist");
+        toast.success("Product Added To Wishlist");
         localStorage.setItem("wishlist", JSON.stringify(state.wishlist))
       } else {
-        toast.error("Shouse Alredy in Wishlist");
+        toast.error("Product Alredy in Wishlist");
       }
     },
     removeToWishlist(state, value) {
